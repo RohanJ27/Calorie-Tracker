@@ -5,3 +5,6 @@ npm-debug.log*
 # Logs
 logs
 *.log
+
+# Environment variables
+backend/.env

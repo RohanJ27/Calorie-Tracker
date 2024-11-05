@@ -1,49 +1,32 @@
+// backend/index.js
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 5000;
-const mongoose = require('mongoose');
 const cors = require('cors');
+const app = express();
+const dotenv = require('dotenv');
+const connectDB = require('./config/db'); // Ensure this exists
 
 // Load environment variables
-require('dotenv').config();
+dotenv.config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected'))
-.catch((err) => console.log('MongoDB connection error:', err));
+connectDB();
 
-// Enable CORS
-app.use(cors());
-
-// Routes
-app.use('/api/users', require('./routes/users'));
-
-// Middleware to parse JSON
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173', // Frontend URL
+  credentials: true,
+}));
 app.use(express.json());
 
-// Basic route
+// Routes
+app.use('/api/users', require('./routes/users')); // Mount users route
+app.use('/api/recipes', require('./routes/recipes')); // Mount recipes route
+
+// Default Route (Optional)
 app.get('/', (req, res) => {
-  res.send('Backend is working!');
+  res.send('API is running...');
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-// Route to handle ingredient input
-app.post('/ingredients', (req, res) => {
-    const ingredients = req.body.ingredients;
-    // Process ingredients
-    res.send('Ingredients received');
-  });
-  
-  // Route to search for recipes
-  app.get('/recipes', (req, res) => {
-    // Fetch recipes based on criteria
-    res.send('Recipes fetched');
-  });
-  
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Backend server running on port ${PORT}`));

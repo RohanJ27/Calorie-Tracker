@@ -1,10 +1,13 @@
 // frontend/src/components/Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext'; // We'll create this context shortly
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setAuth } = useContext(AuthContext); // Access setAuth from context
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,7 +29,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Backend login endpoint
       const res = await axios.post('http://localhost:5000/api/users/login', {
         email,
         password,
@@ -35,11 +37,12 @@ const Login = () => {
       console.log('Login successful:', res.data);
       // Store token in localStorage
       localStorage.setItem('token', res.data.token);
-      // Redirect to Home or another page
-      navigate('/');
+      // Update auth state
+      setAuth(true);
+      // Redirect to Profile or Dashboard
+      navigate('/profile');
     } catch (err) {
       console.error('Login error:', err);
-      // Check if the response exists and has data
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {

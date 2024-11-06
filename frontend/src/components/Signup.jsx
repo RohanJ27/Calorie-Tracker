@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '', // Ensure this field exists
+    username: '',
     email: '',
     password: '',
   });
@@ -31,7 +31,7 @@ const Signup = () => {
     try {
       // Ensure correct endpoint
       const res = await axios.post('http://localhost:5000/api/users/signup', {
-        username, // Ensure this matches the backend expectation
+        username,
         email,
         password,
       });

@@ -24,7 +24,7 @@ const Home = () => {
           to="/signup"
           style={{
             ...styles.button,
-            backgroundColor: signupHovered ? '#4CAF50' : '#66bb6a', // Fresh green for sign up
+            backgroundColor: signupHovered ? '#4CAF50' : '#66bb6a',
           }}
           onMouseEnter={() => setSignupHovered(true)}
           onMouseLeave={() => setSignupHovered(false)}
@@ -35,7 +35,7 @@ const Home = () => {
           to="/login"
           style={{
             ...styles.button,
-            backgroundColor: loginHovered ? '#022400' : '#033500', // Soft blue for login
+            backgroundColor: loginHovered ? '#022400' : '#033500',
           }}
           onMouseEnter={() => setLoginHovered(true)}
           onMouseLeave={() => setLoginHovered(false)}
@@ -57,8 +57,8 @@ const styles = {
     height: '100vh',
     textAlign: 'center',
     padding: '20px',
-    backgroundColor: '#f5f5f5', // Light grey background for a soft and welcoming feel
-    fontFamily: 'josefin-sans-100', // Clean, modern font
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'josefin-sans-100',
     boxSizing: 'border-box',
     overflow: 'hidden',
     backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
@@ -66,23 +66,23 @@ const styles = {
     backgroundPosition: 'center',
   },
   header: {
-    marginBottom: '20px', // Adjust if you want more space below the header
+    marginBottom: '20px',
   },
   title: {
     fontSize: '60px',
     fontWeight: 'bold',
     color: '#2c3e50',
-    marginBottom: '10px', // Adjust the gap here to decrease the space between title and subtitle
+    marginBottom: '10px',
   },
   subtitle: {
     fontSize: '22px',
     color: '#7f8c8d',
-    marginTop: '0', // Remove default margin-top if any, to avoid excessive spacing
+    marginTop: '0',
   },
   buttons: {
     display: 'flex',
     gap: '20px',
-    marginTop: '20px', // Adjust the gap between buttons as needed
+    marginTop: '20px',
   },
   button: {
     padding: '12px 24px',

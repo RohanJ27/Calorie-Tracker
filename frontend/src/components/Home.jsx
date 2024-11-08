@@ -58,6 +58,7 @@ const styles = {
     justifyContent: 'flex-start',
     width: '100vw',
     height: '100vh',
+    fontFamily: 'Funnel Sans',
     backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -87,7 +88,7 @@ const styles = {
   },
   subtitle: {
     fontSize: '20px',
-    color: '#7f8c8d',
+    color: '#5a6465',
     marginBottom: '20px',
   },
   buttons: {

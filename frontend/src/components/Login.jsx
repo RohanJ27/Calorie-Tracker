@@ -55,7 +55,9 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
-      <h2>Login</h2>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Login to RecipeFit</h2>
+      </div>
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
         <div style={styles.formGroup}>
@@ -94,19 +96,46 @@ const Login = () => {
   );
 };
 
-// Simple inline styles for demonstration
 const styles = {
   container: {
-    maxWidth: '400px',
-    margin: '50px auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    height: '100vh',
     padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    boxShadow: '2px 2px 12px #aaa',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Funnel Sans',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  header: {
+    marginBottom: '20px',
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: '10px',
+  },
+  error: {
+    color: 'red',
+    marginBottom: '15px',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
+    width: '100%',
+    maxWidth: '400px',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
   },
   formGroup: {
     marginBottom: '15px',
@@ -115,24 +144,28 @@ const styles = {
     marginBottom: '5px',
     fontWeight: 'bold',
     display: 'block',
+    color: '#2c3e50',
   },
   input: {
-    padding: '8px',
+    padding: '10px',
     width: '100%',
     boxSizing: 'border-box',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   button: {
-    padding: '10px',
-    backgroundColor: '#28a745',
+    padding: '12px',
+    backgroundColor: '#033500',
     color: '#fff',
     border: 'none',
-    borderRadius: '3px',
-    cursor: 'pointer',
+    borderRadius: '8px',
+    fontWeight: 'bold',
     fontSize: '16px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '15px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 };
 

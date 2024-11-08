@@ -1,3 +1,4 @@
+// frontend/src/components/Home.jsx
 import React, { useContext, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
@@ -15,33 +16,35 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <h2 style={styles.title}>Welcome to RecipeFit!</h2>
-        <p style={styles.subtitle}>Recipes That Fit Your Ingredients, Your Goals, Your Life</p>
-      </div>
-      <div style={styles.buttons}>
-        <Link
-          to="/signup"
-          style={{
-            ...styles.button,
-            backgroundColor: signupHovered ? '#4CAF50' : '#66bb6a',
-          }}
-          onMouseEnter={() => setSignupHovered(true)}
-          onMouseLeave={() => setSignupHovered(false)}
-        >
-          Sign Up
-        </Link>
-        <Link
-          to="/login"
-          style={{
-            ...styles.button,
-            backgroundColor: loginHovered ? '#022400' : '#033500',
-          }}
-          onMouseEnter={() => setLoginHovered(true)}
-          onMouseLeave={() => setLoginHovered(false)}
-        >
-          Login
-        </Link>
+      <div style={styles.overlay}>
+        <div style={styles.content}>
+          <h2 style={styles.title}>Welcome to RecipeFit!</h2>
+          <p style={styles.subtitle}>Recipes That Fit Your Ingredients, Your Goals, Your Life</p>
+          <div style={styles.buttons}>
+            <Link
+              to="/signup"
+              style={{
+                ...styles.button,
+                backgroundColor: signupHovered ? '#4CAF50' : '#66bb6a',
+              }}
+              onMouseEnter={() => setSignupHovered(true)}
+              onMouseLeave={() => setSignupHovered(false)}
+            >
+              Sign Up
+            </Link>
+            <Link
+              to="/login"
+              style={{
+                ...styles.button,
+                backgroundColor: loginHovered ? '#022400' : '#033500',
+              }}
+              onMouseEnter={() => setLoginHovered(true)}
+              onMouseLeave={() => setLoginHovered(false)}
+            >
+              Login
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -49,40 +52,47 @@ const Home = () => {
 
 const styles = {
   container: {
+    position: 'relative',
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100vw',
     height: '100vh',
-    textAlign: 'center',
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'josefin-sans-100',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
     backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    overflow: 'hidden',
   },
-  header: {
-    marginBottom: '20px',
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 30%, rgba(255, 255, 255, 0) 70%)',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '50px',
+    boxSizing: 'border-box',
+  },
+  content: {
+    maxWidth: '500px',
+    color: '#2c3e50',
   },
   title: {
-    fontSize: '60px',
+    fontSize: '48px',
     fontWeight: 'bold',
     color: '#2c3e50',
     marginBottom: '10px',
   },
   subtitle: {
-    fontSize: '22px',
+    fontSize: '20px',
     color: '#7f8c8d',
-    marginTop: '0',
+    marginBottom: '20px',
   },
   buttons: {
     display: 'flex',
     gap: '20px',
-    marginTop: '20px',
   },
   button: {
     padding: '12px 24px',

@@ -8,37 +8,69 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Helper function to parse ranges
+const parseRange = (rangeStr) => {
+  if (!rangeStr || !rangeStr.includes('-')) return [0, Infinity];
+  const [minStr, maxStr] = rangeStr.split('-');
+  const min = Number(minStr) || 0;
+  const max = Number(maxStr) || Infinity;
+  return [min, max];
+};
+
 // @route   GET /api/recipes/search
 // @desc    Search for recipes based on user criteria
 // @access  Private
 router.get('/search', auth, async (req, res) => {
-  const { ingredients, diet, health, calories, protein, fat, carbs, from, to } = req.query;
-  console.log('EDAMAM_APP_ID:', process.env.EDAMAM_APP_ID);
-  console.log('EDAMAM_APP_KEY:', process.env.EDAMAM_APP_KEY);
+  const {
+    ingredients,
+    diet,
+    health,
+    calories,
+    protein,
+    fat,
+    carbs,
+    from,
+    to,
+  } = req.query;
+
   // Construct query parameters for Edamam API
-  const params = {
+  let params = {
     app_id: process.env.EDAMAM_APP_ID,
     app_key: process.env.EDAMAM_APP_KEY,
-    q: ingredients || '', // Ingredients input
-    diet: diet || '', // Dietary restrictions
-    health: health || '', // Health labels
-    calories: calories || '', // Calorie range
-    from: parseInt(from) || 0, // Pagination start
-    to: parseInt(to) || 20, // Pagination end
+    q: ingredients || '',
+    from: parseInt(from) || 0,
+    to: parseInt(to) || 100, // Fetch more recipes to have more data for filtering
   };
 
-  console.log('🔍 Recipe Search Request Params:', params);
+  // Add optional parameters if they exist
+  if (diet) params.diet = diet;
+  if (health) params.health = health;
+  if (calories) params.calories = calories;
+
+  // Remove nutrient parameters from API request
+  // We'll apply nutrient filtering in the backend after fetching recipes
+
+  // Remove empty parameters
+  Object.keys(params).forEach((key) => {
+    if (!params[key]) {
+      delete params[key];
+    }
+  });
+
+  console.log('🔍 Cleaned Edamam API Request Params:', params);
 
   try {
     // Make request to Edamam Recipe Search API
-    const response = await axios.get('https://api.edamam.com/search', { params });
+    const response = await axios.get('https://api.edamam.com/search', {
+      params,
+    });
 
     console.log('🟢 Edamam API Response Status:', response.status);
     console.log('🟢 Number of Recipes Received:', response.data.hits.length);
 
-    // Extract and filter recipes based on macronutrient goals
-    let recipes = response.data.hits.map(hit => ({
-      id: hit.recipe.uri, // Unique identifier
+    // Map the recipes
+    let recipes = response.data.hits.map((hit) => ({
+      id: hit.recipe.uri,
       label: hit.recipe.label,
       image: hit.recipe.image,
       source: hit.recipe.source,
@@ -50,53 +82,47 @@ router.get('/search', auth, async (req, res) => {
       healthLabels: hit.recipe.healthLabels,
     }));
 
-    // Apply macronutrient filters if provided
+    console.log('📝 Recipes Before Filtering:', recipes.length);
+
+    // Apply nutrient filtering if nutrient ranges are provided
     if (protein || fat || carbs) {
-      recipes = recipes.filter(recipe => {
-        let meetsProtein = true;
-        let meetsFat = true;
-        let meetsCarbs = true;
+      const [minProtein, maxProtein] = parseRange(protein);
+      const [minFat, maxFat] = parseRange(fat);
+      const [minCarbs, maxCarbs] = parseRange(carbs);
 
-        if (protein) {
-          const [minProtein, maxProtein] = protein.split('-').map(Number);
-          const recipeProtein = recipe.totalNutrients.PROCNT
-            ? recipe.totalNutrients.PROCNT.quantity
-            : 0;
-          meetsProtein = recipeProtein >= minProtein && recipeProtein <= maxProtein;
-        }
+      recipes = recipes.filter((recipe) => {
+        const recipeProtein = recipe.totalNutrients.PROCNT?.quantity || 0;
+        const recipeFat = recipe.totalNutrients.FAT?.quantity || 0;
+        const recipeCarbs = recipe.totalNutrients.CHOCDF?.quantity || 0;
 
-        if (fat) {
-          const [minFat, maxFat] = fat.split('-').map(Number);
-          const recipeFat = recipe.totalNutrients.FAT
-            ? recipe.totalNutrients.FAT.quantity
-            : 0;
-          meetsFat = recipeFat >= minFat && recipeFat <= maxFat;
-        }
-
-        if (carbs) {
-          const [minCarbs, maxCarbs] = carbs.split('-').map(Number);
-          const recipeCarbs = recipe.totalNutrients.CHOCDF
-            ? recipe.totalNutrients.CHOCDF.quantity
-            : 0;
-          meetsCarbs = recipeCarbs >= minCarbs && recipeCarbs <= maxCarbs;
-        }
+        const meetsProtein =
+          !protein || (recipeProtein >= minProtein && recipeProtein <= maxProtein);
+        const meetsFat =
+          !fat || (recipeFat >= minFat && recipeFat <= maxFat);
+        const meetsCarbs =
+          !carbs || (recipeCarbs >= minCarbs && recipeCarbs <= maxCarbs);
 
         return meetsProtein && meetsFat && meetsCarbs;
       });
     }
 
-    res.json({ recipes, total: response.data.count });
+    console.log('📝 Recipes After Filtering:', recipes.length);
+
+    // Update the total count after filtering
+    const total = recipes.length;
+
+    // Limit the number of recipes sent back to the frontend
+    recipes = recipes.slice(0, 20); // Adjust as needed
+
+    res.json({ recipes, total });
   } catch (error) {
     console.error('🛑 Edamam API Error:', error.message);
     if (error.response) {
-      // The request was made, and the server responded with a status code
       console.error('🛑 Edamam API Response Data:', error.response.data);
       console.error('🛑 Edamam API Response Status:', error.response.status);
     } else if (error.request) {
-      // The request was made, but no response was received
       console.error('🛑 No response received from Edamam API:', error.request);
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.error('🛑 Error setting up Edamam API request:', error.message);
     }
     res.status(500).json({ message: 'Error fetching recipes from Edamam API' });

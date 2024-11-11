@@ -1,12 +1,14 @@
+// frontend/src/components/SearchForm.jsx
+
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import RecipeContext from '../context/RecipeContext'; // Import RecipeContext
+import RecipeContext from '../context/RecipeContext';
 
 const SearchForm = () => {
   const { auth } = useContext(AuthContext);
-  const { setRecipes, setTotal } = useContext(RecipeContext); // Destructure set functions
+  const { setRecipes, setTotal } = useContext(RecipeContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     ingredients: '',
@@ -22,6 +24,11 @@ const SearchForm = () => {
 
   const { ingredients, diet, health, calories, protein, fat, carbs } = formData;
 
+  // Input validation function for macronutrient ranges
+  const isValidRange = (value) => {
+    return /^\d+-\d+$/.test(value);
+  };
+
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -30,6 +37,17 @@ const SearchForm = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Validate macronutrient inputs
+    if (
+      (protein && !isValidRange(protein)) ||
+      (fat && !isValidRange(fat)) ||
+      (carbs && !isValidRange(carbs))
+    ) {
+      setError('Please enter macronutrient ranges in the format "min-max".');
+      setLoading(false);
+      return;
+    }
 
     try {
       const params = {};
@@ -41,6 +59,8 @@ const SearchForm = () => {
       if (protein) params.protein = protein;
       if (fat) params.fat = fat;
       if (carbs) params.carbs = carbs;
+
+      console.log('Submitting Search with Params:', params);
 
       const token = localStorage.getItem('token');
 
@@ -71,11 +91,12 @@ const SearchForm = () => {
 
   return (
     <div style={styles.container}>
-      <h2>Find Your Perfect Recipe</h2>
+      <h2 style={styles.title}>Find Your Perfect Recipe</h2>
+      {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
         {/* Ingredients Input */}
         <div style={styles.formGroup}>
-          <label htmlFor="ingredients">Ingredients (comma-separated):</label>
+          <label htmlFor="ingredients" style={styles.label}>Ingredients (comma-separated):</label>
           <input
             type="text"
             id="ingredients"
@@ -89,7 +110,7 @@ const SearchForm = () => {
 
         {/* Dietary Restrictions */}
         <div style={styles.formGroup}>
-          <label htmlFor="diet">Dietary Restrictions:</label>
+          <label htmlFor="diet" style={styles.label}>Dietary Restrictions:</label>
           <select
             id="diet"
             name="diet"
@@ -110,7 +131,7 @@ const SearchForm = () => {
 
         {/* Health Labels */}
         <div style={styles.formGroup}>
-          <label htmlFor="health">Health Labels:</label>
+          <label htmlFor="health" style={styles.label}>Health Labels:</label>
           <select
             id="health"
             name="health"
@@ -128,114 +149,101 @@ const SearchForm = () => {
           </select>
         </div>
 
-        {/* Calorie Range */}
-        <div style={styles.formGroup}>
-          <label htmlFor="calories">Calorie Range:</label>
-          <input
-            type="text"
-            id="calories"
-            name="calories"
-            value={calories}
-            onChange={onChange}
-            placeholder="e.g., 200-500"
-            style={styles.input}
-          />
-        </div>
-
-        {/* Protein Range */}
-        <div style={styles.formGroup}>
-          <label htmlFor="protein">Protein (g) Range:</label>
-          <input
-            type="text"
-            id="protein"
-            name="protein"
-            value={protein}
-            onChange={onChange}
-            placeholder="e.g., 10-20"
-            style={styles.input}
-          />
-        </div>
-
-        {/* Fat Range */}
-        <div style={styles.formGroup}>
-          <label htmlFor="fat">Fat (g) Range:</label>
-          <input
-            type="text"
-            id="fat"
-            name="fat"
-            value={fat}
-            onChange={onChange}
-            placeholder="e.g., 5-15"
-            style={styles.input}
-          />
-        </div>
-
-        {/* Carbs Range */}
-        <div style={styles.formGroup}>
-          <label htmlFor="carbs">Carbohydrates (g) Range:</label>
-          <input
-            type="text"
-            id="carbs"
-            name="carbs"
-            value={carbs}
-            onChange={onChange}
-            placeholder="e.g., 20-40"
-            style={styles.input}
-          />
-        </div>
-
         {/* Submit Button */}
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Searching...' : 'Search Recipes'}
         </button>
       </form>
-
-      {/* Error Message */}
-      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 };
-  // Inline styles for simplicity; consider using CSS or styled-components for larger projects
-  const styles = {
-    container: {
-      maxWidth: '600px',
-      margin: '50px auto',
-      padding: '20px',
-      border: '1px solid #ccc',
-      borderRadius: '5px',
-      boxShadow: '2px 2px 12px #aaa',
-      backgroundColor: '#fff',
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    formGroup: {
-      marginBottom: '15px',
-    },
-    input: {
-      padding: '8px',
-      width: '100%',
-      boxSizing: 'border-box',
-    },
-    select: {
-      padding: '8px',
-      width: '100%',
-      boxSizing: 'border-box',
-    },
-    button: {
-      padding: '10px',
-      backgroundColor: '#007bff',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '3px',
-      cursor: 'pointer',
-      fontSize: '16px',
-    },
-    error: {
-      color: 'red',
-      marginTop: '15px',
-    },
-  };
 
-  export default SearchForm;
+// Enhanced styles adapted from your Login and Signup components
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    minHeight: '100vh',
+    padding: '20px',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Funnel Sans, sans-serif',
+    boxSizing: 'border-box',
+    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  title: {
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: '20px',
+    textAlign: 'center',
+    textShadow: '1px 1px 2px #fff',
+  },
+  error: {
+    color: 'red',
+    marginBottom: '15px',
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    padding: '10px',
+    borderRadius: '5px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: '600px',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+  },
+  formGroup: {
+    marginBottom: '20px',
+  },
+  label: {
+    marginBottom: '8px',
+    fontWeight: 'bold',
+    display: 'block',
+    color: '#2c3e50',
+    fontSize: '16px',
+  },
+  input: {
+    padding: '12px',
+    width: '100%',
+    boxSizing: 'border-box',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    backgroundColor: '#fff',
+    color: '#333',
+    fontSize: '16px',
+  },
+  select: {
+    padding: '12px',
+    width: '100%',
+    boxSizing: 'border-box',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
+    color: '#333',
+    backgroundColor: '#fff',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#033500',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+};
+
+export default SearchForm;

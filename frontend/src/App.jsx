@@ -5,13 +5,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Profile from './components/Profile';
-import Upload from './components/Upload';
 import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './context/AuthProvider';
-import RecipeProvider from './context/RecipeProvider'; // Ensure correct import
+import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -29,14 +28,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/upload"
-                element={
-                  <ProtectedRoute>
-                    <Upload />
                   </ProtectedRoute>
                 }
               />

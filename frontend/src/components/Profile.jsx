@@ -1,3 +1,5 @@
+// frontend/src/components/Profile.jsx
+
 import React, { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,14 +17,15 @@ const Profile = () => {
 
   // If user is null, display a loading message or redirect
   if (!user) {
-    return <p>Loading profile...</p>; // Or redirect to login
+    return <p style={styles.loading}>Loading profile...</p>; // Or redirect to login
   }
 
   return (
     <div style={styles.container}>
-      <h2>Welcome, {user.username}!</h2>
-      <p>Email: {user.email}</p>
-      {/* Add more user-specific data here */}
+      <div style={styles.header}>
+        <h2 style={styles.title}>Welcome, {user.username}!</h2>
+        <p style={styles.email}>Email: {user.email}</p>
+      </div>
       <div style={styles.buttons}>
         <Link to="/upload" style={styles.button}>
           Upload Recipe
@@ -39,41 +42,88 @@ const Profile = () => {
 };
 
 const styles = {
-    container: {
-      maxWidth: '500px',
-      margin: '50px auto',
-      padding: '20px',
-      border: '1px solid #ccc',
-      borderRadius: '5px',
-      boxShadow: '2px 2px 12px #aaa',
-      textAlign: 'center',
-    },
-    buttons: {
-      marginTop: '30px',
-      display: 'flex',
-      justifyContent: 'space-around',
-    },
-    button: {
-      padding: '10px 20px',
-      backgroundColor: '#17a2b8',
-      color: '#fff',
-      textDecoration: 'none',
-      borderRadius: '3px',
-      cursor: 'pointer',
-    },
-    logoutButton: {
-      padding: '10px 20px',
-      backgroundColor: '#dc3545',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '3px',
-      cursor: 'pointer',
-    },
-    loading: {
-      textAlign: 'center',
-      marginTop: '50px',
-      fontSize: '18px',
-    },
-  };
-  
-  export default Profile;
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    height: '100vh',
+    padding: '20px',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Funnel Sans, sans-serif',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+    backgroundImage:
+      'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  header: {
+    marginBottom: '30px',
+    textAlign: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+    width: '100%',
+    maxWidth: '500px',
+  },
+  title: {
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: '10px',
+  },
+  email: {
+    fontSize: '18px',
+    color: '#2c3e50',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    width: '100%',
+    maxWidth: '300px',
+    alignItems: 'center',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#033500',
+    color: '#fff',
+    textDecoration: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    width: '100%',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  logoutButton: {
+    padding: '14px',
+    backgroundColor: '#dc3545',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    width: '100%',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  loading: {
+    textAlign: 'center',
+    marginTop: '50px',
+    fontSize: '18px',
+    color: '#fff',
+  },
+};
+
+export default Profile;

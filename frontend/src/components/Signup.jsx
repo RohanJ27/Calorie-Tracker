@@ -1,74 +1,55 @@
 // frontend/src/components/Signup.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    password2: '',
   });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { username, email, password, password2 } = formData;
 
-  const { username, email, password } = formData;
-
-  // Handle input changes
-  const onChange = (e) =>
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  // Handle form submission
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setLoading(true);
+    setError('');
+
+    if (password !== password2) {
+      setError('Passwords do not match');
+      return;
+    }
 
     try {
-      // Ensure correct endpoint
-      const res = await axios.post('http://localhost:5000/api/users/signup', {
-        username,
-        email,
-        password,
-      });
-
-      console.log('Signup successful:', res.data);
-      setSuccess('Registration successful! Redirecting to login...');
-      // Redirect to login after a short delay
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      await axios.post('http://localhost:5000/api/users', { username, email, password });
+      navigate('/login');
     } catch (err) {
-      console.error('Signup error:', err);
-      // Extract and display error message from backend
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('Registration failed. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+      setError(err.response.data.message || 'An error occurred during signup');
     }
   };
 
   return (
     <div style={styles.container}>
-      <h2>Sign Up</h2>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Create an Account</h2>
+      </div>
       {error && <p style={styles.error}>{error}</p>}
-      {success && <p style={styles.success}>{success}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
         <div style={styles.formGroup}>
-          <label htmlFor="username" style={styles.label}>
-            Username:
-          </label>
+          <label htmlFor="username" style={styles.label}>Username</label>
           <input
             type="text"
-            id="username" // Updated id
-            name="username" // Updated name
+            id="username"
+            name="username"
             value={username}
             onChange={onChange}
             required
@@ -76,9 +57,7 @@ const Signup = () => {
           />
         </div>
         <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
-            Email:
-          </label>
+          <label htmlFor="email" style={styles.label}>Email</label>
           <input
             type="email"
             id="email"
@@ -90,9 +69,7 @@ const Signup = () => {
           />
         </div>
         <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.label}>
-            Password:
-          </label>
+          <label htmlFor="password" style={styles.label}>Password</label>
           <input
             type="password"
             id="password"
@@ -103,57 +80,100 @@ const Signup = () => {
             style={styles.input}
           />
         </div>
-        <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? 'Registering...' : 'Register'}
-        </button>
+        <div style={styles.formGroup}>
+          <label htmlFor="password2" style={styles.label}>Confirm Password</label>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            value={password2}
+            onChange={onChange}
+            required
+            style={styles.input}
+          />
+        </div>
+        <button type="submit" style={styles.button}>Sign Up</button>
       </form>
     </div>
   );
 };
 
-// Simple inline styles for demonstration
+// Enhanced styles adapted from the Login component
 const styles = {
   container: {
-    maxWidth: '400px',
-    margin: '50px auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    boxShadow: '2px 2px 12px #aaa',
-  },
-  form: {
     display: 'flex',
     flexDirection: 'column',
-  },
-  formGroup: {
-    marginBottom: '15px',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold',
-    display: 'block',
-  },
-  input: {
-    padding: '8px',
-    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    height: '100vh',
+    padding: '20px',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Funnel Sans, sans-serif',
     boxSizing: 'border-box',
+    overflow: 'hidden',
+    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
-  button: {
-    padding: '10px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '3px',
-    cursor: 'pointer',
-    fontSize: '16px',
+  header: {
+    marginBottom: '20px',
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: '10px',
   },
   error: {
     color: 'red',
     marginBottom: '15px',
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    padding: '10px',
+    borderRadius: '5px',
   },
-  success: {
-    color: 'green',
-    marginBottom: '15px',
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: '400px',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+  },
+  formGroup: {
+    marginBottom: '20px',
+  },
+  label: {
+    marginBottom: '8px',
+    fontWeight: 'bold',
+    display: 'block',
+    color: '#2c3e50',
+    fontSize: '16px',
+  },
+  input: {
+    padding: '12px',
+    width: '100%',
+    boxSizing: 'border-box',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#033500',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 };
 

@@ -24,7 +24,7 @@ const SearchForm = () => {
 
   const { ingredients, diet, health, calories, protein, fat, carbs } = formData;
 
-  // Input validation function for macronutrient ranges
+  
   const isValidRange = (value) => {
     return /^\d+-\d+$/.test(value);
   };
@@ -158,7 +158,6 @@ const SearchForm = () => {
   );
 };
 
-// Enhanced styles adapted from your Login and Signup components
 const styles = {
   container: {
     display: 'flex',

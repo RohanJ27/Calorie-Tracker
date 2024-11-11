@@ -9,26 +9,31 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
-    if (token) {
-      axios
-        .get('http://localhost:5000/api/users/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
+    const fetchUser = async () => {
+      if (token) {
+        try {
+          const res = await axios.get('http://localhost:5000/api/users/me', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           setAuth(true);
           setUser(res.data);
-        })
-        .catch(() => {
+        } catch (err) {
+          console.error('Error fetching user:', err);
           setAuth(false);
           setUser(null);
           setToken(null);
           localStorage.removeItem('token');
-        });
-    } else {
-      setAuth(false);
-      setUser(null);
-    }
-  }, [token]); 
+        }
+      } else {
+        setAuth(false);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, [token]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, user, setUser, setToken }}>

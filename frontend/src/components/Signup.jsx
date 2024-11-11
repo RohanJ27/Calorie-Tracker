@@ -1,37 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const { setAuth, setUser } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     password2: '',
   });
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { username, email, password, password2 } = formData;
 
-  const onChange = (e) => {
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(null);
 
+    // Simple validation
     if (password !== password2) {
       setError('Passwords do not match');
       return;
     }
 
+    setLoading(true);
+
     try {
-      await axios.post('http://localhost:5000/api/users', { username, email, password });
-      navigate('/login');
+      const res = await axios.post('http://localhost:5000/api/users/signup', {
+        username,
+        email,
+        password,
+      });
+
+      console.log('Signup successful:', res.data);
+
+      // Store token in localStorage
+      localStorage.setItem('token', res.data.token);
+      setAuth(true);
+
+      // Fetch user data using the token
+      const userRes = await axios.get('http://localhost:5000/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${res.data.token}`,
+        },
+      });
+
+      setUser(userRes.data);
+
+      // Navigate to profile
+      navigate('/profile');
     } catch (err) {
-      setError(err.response.data.message || 'An error occurred during signup');
+      console.error('Signup error:', err);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Signup failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,7 +78,9 @@ const Signup = () => {
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
         <div style={styles.formGroup}>
-          <label htmlFor="username" style={styles.label}>Username</label>
+          <label htmlFor="username" style={styles.label}>
+            Username:
+          </label>
           <input
             type="text"
             id="username"
@@ -55,7 +92,9 @@ const Signup = () => {
           />
         </div>
         <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>Email</label>
+          <label htmlFor="email" style={styles.label}>
+            Email:
+          </label>
           <input
             type="email"
             id="email"
@@ -67,7 +106,9 @@ const Signup = () => {
           />
         </div>
         <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.label}>Password</label>
+          <label htmlFor="password" style={styles.label}>
+            Password:
+          </label>
           <input
             type="password"
             id="password"
@@ -79,7 +120,9 @@ const Signup = () => {
           />
         </div>
         <div style={styles.formGroup}>
-          <label htmlFor="password2" style={styles.label}>Confirm Password</label>
+          <label htmlFor="password2" style={styles.label}>
+            Confirm Password:
+          </label>
           <input
             type="password"
             id="password2"
@@ -90,7 +133,9 @@ const Signup = () => {
             style={styles.input}
           />
         </div>
-        <button type="submit" style={styles.button}>Sign Up</button>
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? 'Signing up...' : 'Sign Up'}
+        </button>
       </form>
     </div>
   );

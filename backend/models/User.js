@@ -1,17 +1,16 @@
-// backend/models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Username is required'],
-    unique: true, // Ensures usernames are unique
+    unique: true,
     trim: true,
   },
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true, // Ensures emails are unique
+    unique: true, 
     lowercase: true,
     trim: true,
     match: [/\S+@\S+\.\S+/, 'Email is invalid'],

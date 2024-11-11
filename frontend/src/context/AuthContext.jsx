@@ -1,5 +1,3 @@
-// frontend/src/context/AuthContext.jsx
-
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -30,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       setAuth(false);
       setUser(null);
     }
-  }, [token]); // Include 'token' in dependency array
+  }, [token]); 
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, user, setUser, setToken }}>

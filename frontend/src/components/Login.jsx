@@ -17,7 +17,6 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  // Navigate to profile after auth and user are set
   useEffect(() => {
     if (auth && user) {
       navigate('/profile');
@@ -33,7 +32,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Authenticate user and get token
       const res = await axios.post('http://localhost:5000/api/users/login', {
         email,
         password,
@@ -41,11 +39,9 @@ const Login = () => {
 
       console.log('Login successful:', res.data);
 
-      // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       setAuth(true);
 
-      // Fetch user data using the token
       const userRes = await axios.get('http://localhost:5000/api/users/me', {
         headers: {
           Authorization: `Bearer ${res.data.token}`,
@@ -55,7 +51,6 @@ const Login = () => {
       const userData = userRes.data;
       setUser(userData);
 
-      // Navigation is handled in useEffect
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.data && err.response.data.message) {

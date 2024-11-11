@@ -1,4 +1,3 @@
-// backend/routes/users.js
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
@@ -31,7 +30,6 @@ router.post(
     check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
   ],
   async (req, res) => {
-    // Validate incoming data
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('Signup Validation Failed:', errors.array());
@@ -43,10 +41,8 @@ router.post(
     console.log('Signup Attempt:', { username, email });
 
     try {
-      // Normalize email
       const normalizedEmail = email.toLowerCase();
 
-      // Check for existing user by email or username
       let user = await User.findOne({ $or: [{ email: normalizedEmail }, { username }] });
       if (user) {
         console.log('Signup Failed: User already exists');
@@ -62,11 +58,9 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
 
-      // Save user to DB
       await user.save();
       console.log('User Registered:', user);
 
-      // Create JWT payload
       const payload = {
         user: {
           id: user.id,

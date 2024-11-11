@@ -1,4 +1,3 @@
-// frontend/src/components/Home.jsx
 import React, { useContext, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
@@ -6,7 +5,6 @@ import AuthContext from '../context/AuthContext';
 const Home = () => {
   const { auth } = useContext(AuthContext);
 
-  // Separate hover states for each button
   const [signupHovered, setSignupHovered] = useState(false);
   const [loginHovered, setLoginHovered] = useState(false);
 

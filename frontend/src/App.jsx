@@ -18,8 +18,8 @@ function App() {
       <AuthProvider>
         <RecipeProvider>
           <ErrorBoundary>
-            <Navbar /> {/* Navbar is included here to display on all pages */}
-            <div style={{ paddingTop: '60px' }}> {/* Add padding to prevent content overlap */}
+            <Navbar />
+            <div style={{ paddingTop: '60px' }}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signup />} />

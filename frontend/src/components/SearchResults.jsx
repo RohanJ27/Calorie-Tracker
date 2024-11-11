@@ -10,11 +10,9 @@ const SearchResults = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if recipes are available
     if (recipes && recipes.length > 0) {
       setLoading(false);
     } else {
-      // Wait a bit to see if data arrives
       const timeout = setTimeout(() => {
         if (!recipes || recipes.length === 0) {
           navigate('/search');

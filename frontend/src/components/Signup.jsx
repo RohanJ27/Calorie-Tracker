@@ -1,5 +1,3 @@
-// frontend/src/components/Signup.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -98,7 +96,6 @@ const Signup = () => {
   );
 };
 
-// Enhanced styles adapted from the Login component
 const styles = {
   container: {
     display: 'flex',

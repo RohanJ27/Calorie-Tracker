@@ -1,5 +1,3 @@
-// frontend/src/context/RecipeProvider.jsx
-
 import React, { useState } from 'react';
 import RecipeContext from './RecipeContext';
 

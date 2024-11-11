@@ -10,9 +10,19 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// @route   POST /api/users/signup
-// @desc    Register a new user
-// @access  Public
+router.get('/me', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error('Server Error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 router.post(
   '/signup',
   [
@@ -43,14 +53,12 @@ router.post(
         return res.status(400).json({ message: 'User already exists' });
       }
 
-      // Create new user instance
       user = new User({
         username,
         email: normalizedEmail,
         password,
       });
 
-      // Hash password
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
 
@@ -65,11 +73,10 @@ router.post(
         },
       };
 
-      // Sign token
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, // Token expires in 1 hour
+        { expiresIn: '1h' }, 
         (err, token) => {
           if (err) {
             console.error('JWT Sign Error:', err);
@@ -86,26 +93,20 @@ router.post(
   }
 );
 
-// @route   POST /api/users/login
-// @desc    Authenticate user and get token
-// @access  Public
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
-    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
-    // Create JWT payload
     const payload = {
       user: {
         id: user.id,
@@ -113,11 +114,10 @@ router.post('/login', async (req, res) => {
       },
     };
 
-    // Sign JWT
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }, // Token expires in 1 hour
+      { expiresIn: '1h' }, 
       (err, token) => {
         if (err) throw err;
         res.json({ token });
@@ -129,9 +129,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// @route   GET /api/users/profile
-// @desc    Get user profile
-// @access  Private
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');

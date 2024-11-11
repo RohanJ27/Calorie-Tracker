@@ -1,5 +1,3 @@
-// frontend/src/context/RecipeContext.jsx
-
 import React, { createContext, useState } from 'react';
 
 const RecipeContext = createContext();

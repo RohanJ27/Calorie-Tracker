@@ -1,12 +1,11 @@
-// frontend/src/components/Login.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext'; // We'll create this context shortly
+import AuthContext from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext); // Access setAuth from context
+  const { setAuth, setUser, auth, user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -18,29 +17,45 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  // Handle input changes
+  // Navigate to profile after auth and user are set
+  useEffect(() => {
+    if (auth && user) {
+      navigate('/profile');
+    }
+  }, [auth, user, navigate]);
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // Handle form submission
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
+      // Authenticate user and get token
       const res = await axios.post('http://localhost:5000/api/users/login', {
         email,
         password,
       });
 
       console.log('Login successful:', res.data);
+
       // Store token in localStorage
       localStorage.setItem('token', res.data.token);
-      // Update auth state
       setAuth(true);
-      // Redirect to Profile or Dashboard
-      navigate('/profile');
+
+      // Fetch user data using the token
+      const userRes = await axios.get('http://localhost:5000/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${res.data.token}`,
+        },
+      });
+
+      const userData = userRes.data;
+      setUser(userData);
+
+      // Navigation is handled in useEffect
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.data && err.response.data.message) {
@@ -109,7 +124,8 @@ const styles = {
     fontFamily: 'Funnel Sans',
     boxSizing: 'border-box',
     overflow: 'hidden',
-    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundImage:
+      'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },

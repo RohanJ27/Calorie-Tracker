@@ -1,5 +1,3 @@
-// frontend/src/components/SearchForm.jsx
-
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -38,7 +36,6 @@ const SearchForm = () => {
     setLoading(true);
     setError(null);
 
-    // Validate macronutrient inputs
     if (
       (protein && !isValidRange(protein)) ||
       (fat && !isValidRange(fat)) ||
@@ -73,11 +70,9 @@ const SearchForm = () => {
 
       const { recipes, total } = res.data;
 
-      // Update context
       setRecipes(recipes);
       setTotal(total);
 
-      // Navigate to the results page
       navigate('/results');
     } catch (err) {
       console.error('🛑 Recipe Search Error:', err);
@@ -94,7 +89,6 @@ const SearchForm = () => {
       <h2 style={styles.title}>Find Your Perfect Recipe</h2>
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
-        {/* Ingredients Input */}
         <div style={styles.formGroup}>
           <label htmlFor="ingredients" style={styles.label}>Ingredients (comma-separated):</label>
           <input
@@ -108,7 +102,6 @@ const SearchForm = () => {
           />
         </div>
 
-        {/* Dietary Restrictions */}
         <div style={styles.formGroup}>
           <label htmlFor="diet" style={styles.label}>Dietary Restrictions:</label>
           <select
@@ -125,11 +118,9 @@ const SearchForm = () => {
             <option value="low-carb">Low-Carb</option>
             <option value="vegetarian">Vegetarian</option>
             <option value="vegan">Vegan</option>
-            {/* Add more diet options as needed */}
           </select>
         </div>
 
-        {/* Health Labels */}
         <div style={styles.formGroup}>
           <label htmlFor="health" style={styles.label}>Health Labels:</label>
           <select
@@ -145,11 +136,9 @@ const SearchForm = () => {
             <option value="gluten-free">Gluten-Free</option>
             <option value="dairy-free">Dairy-Free</option>
             <option value="egg-free">Egg-Free</option>
-            {/* Add more health labels as needed */}
           </select>
         </div>
 
-        {/* Submit Button */}
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Searching...' : 'Search Recipes'}
         </button>

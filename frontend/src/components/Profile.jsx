@@ -15,9 +15,8 @@ const Profile = () => {
     navigate('/login');
   };
 
-  // If user is null, display a loading message or redirect
-  if (!user) {
-    return <p style={styles.loading}>Loading profile...</p>; // Or redirect to login
+  if(!user) {
+    return <p>Loading profile...</p>
   }
 
   return (

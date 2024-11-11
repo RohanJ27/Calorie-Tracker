@@ -1,4 +1,3 @@
-// frontend/src/context/AuthProvider.jsx
 import React, { useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
 import axios from 'axios';
@@ -6,7 +5,7 @@ import axios from 'axios';
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [user, setUser] = useState(null); // Optional: Store user data
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -20,7 +19,7 @@ const AuthProvider = ({ children }) => {
           });
           if (res.data) {
             setAuth(true);
-            setUser(res.data); // Optional: Set user data
+            setUser(res.data);
           }
         } catch (err) {
           console.error('Auth check failed:', err);

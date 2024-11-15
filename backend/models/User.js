@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
   },
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
+  }],
   date: {
     type: Date,
     default: Date.now,

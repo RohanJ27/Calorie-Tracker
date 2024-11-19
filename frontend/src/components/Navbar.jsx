@@ -18,6 +18,12 @@ const Navbar = () => {
       <div className="logo">
         <Link to="/" className="logo-text">RecipeFit</Link>
       </div>
+      <div class="toggle-container">
+        <label class="switch">
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </label>
+      </div>
       <div className="nav-links">
         <Link to="/search" className="nav-link">Search Recipes</Link>
         {auth ? (

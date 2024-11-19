@@ -8,7 +8,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
-  const [otherUserId, setOtherUserId] = useState('');
+  const [friendIdentifier, setFriendIdentifier] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -48,12 +49,31 @@ const Profile = () => {
   };
 
   const sendFriendRequest = async () => {
+    if (!friendIdentifier.trim()) {
+      setSuccessMessage('Identifier cannot be empty.');
+      setTimeout(() => setSuccessMessage(''), 5000);
+      return;
+    }
+  
     try {
-      await axios.post(`/api/users/send-friend-request/${otherUserId}`);
-      setOtherUserId('');
-      alert('Friend request sent');
+      const res = await axios.post(
+        '/api/users/send-friend-request',
+        { identifier: friendIdentifier },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      setSuccessMessage(`Friend request sent to ${friendIdentifier}`);
+      setFriendIdentifier('');
     } catch (err) {
-      console.error(err);
+      console.error('Error sending friend request:', err.response || err);
+      if (err.response?.data?.message) {
+        setSuccessMessage(err.response.data.message);
+      } else {
+        setSuccessMessage('Failed to send friend request. Please try again.');
+      }
+    } finally {
+      setTimeout(() => setSuccessMessage(''), 5000);
     }
   };
 
@@ -94,11 +114,12 @@ const Profile = () => {
 
       <div style={styles.section}>
         <h3 style={styles.subtitle}>Send Friend Request</h3>
+        {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
         <input
           type="text"
-          placeholder="Enter User ID"
-          value={otherUserId}
-          onChange={(e) => setOtherUserId(e.target.value)}
+          placeholder="Enter Username or Email"
+          value={friendIdentifier}
+          onChange={(e) => setFriendIdentifier(e.target.value)}
           style={styles.input}
         />
         <button onClick={sendFriendRequest} style={styles.button}>Send Request</button>
@@ -234,6 +255,9 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ddd',
     boxSizing: 'border-box',
+    fontSize: '16px',
+    fontFamily: 'Funnel Sans, sans-serif',
+    color: '#2c3e50',
   },
   request: {
     display: 'flex',
@@ -264,6 +288,11 @@ const styles = {
   loading: {
     fontSize: '24px',
     color: '#999',
+  },
+  successMessage: {
+    color: '#28a745',
+    fontWeight: 'bold',
+    marginBottom: '10px',
   },
 };
 

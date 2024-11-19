@@ -164,7 +164,6 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '16px',
-
   },
   button: {
     padding: '12px',

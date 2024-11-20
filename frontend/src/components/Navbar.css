@@ -152,3 +152,10 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+  .toggleText {
+    position: absolute;
+    right: 1125px;
+    font-weight: bold;
+  }
+

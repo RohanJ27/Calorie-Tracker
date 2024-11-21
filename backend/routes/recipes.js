@@ -92,12 +92,12 @@ router.get('/search', auth, async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { $inc: { score: 1 } },
-      { new: true } // Returns the updated document
+      { new: true }
     );
 
     console.log(`User ${req.user.id} new score: ${updatedUser.score}`);
 
-    res.json({ recipes, total });
+    res.json({ recipes, total, score: updatedUser.score });
   } catch (error) {
     console.error('🛑 Edamam API Error:', error.message);
     res.status(500).json({ msg: 'Error fetching recipes from Edamam API' });

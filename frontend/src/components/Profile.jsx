@@ -7,21 +7,27 @@ const Profile = () => {
   const { user, setAuth, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
-  const [friendRequests, setFriendRequests] = useState([]);
-  const [friendIdentifier, setFriendIdentifier] = useState('');
+  const [friendEmail, setFriendEmail] = useState('');  // Changed to friendEmail
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (user) {
-      axios.get('/api/users/friend-requests', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-        .then(response => setFriendRequests(response.data.friendRequests || []))  // Use default empty array
-        .catch(error => console.error('Failed to fetch friend requests:', error));
-
-      axios.get('/api/users/friends', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-        .then(response => setFriends(response.data.friends || []))  // Use default empty array
-        .catch(error => console.error('Failed to fetch friends:', error));
+      fetchFriends();
     }
   }, [user]);
+
+  const fetchFriends = async () => {
+    try {
+      const response = await axios.get(`/api/users/friends/${user._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setFriends(response.data.friends || []);
+    } catch (error) {
+      console.error('Failed to fetch friends:', error);
+      setErrorMessage('Unable to load friends list.');
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -30,69 +36,37 @@ const Profile = () => {
     navigate('/login');
   };
 
-  const fetchFriends = async () => {
-    try {
-      const res = await axios.get(`/api/users/friends/${user._id}`);
-      setFriends(res.data.friends);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchFriendRequests = async () => {
-    try {
-      const res = await axios.get(`/api/users/friend-requests`);
-      setFriendRequests(res.data.requests);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const sendFriendRequest = async () => {
-    if (!friendIdentifier.trim()) {
-      setSuccessMessage('Identifier cannot be empty.');
-      setTimeout(() => setSuccessMessage(''), 5000);
+  const addFriend = async () => {
+    if (!friendEmail.trim()) {
+      setErrorMessage('Email cannot be empty.');
+      setTimeout(() => setErrorMessage(''), 5000);
       return;
     }
-  
+
+    const url = 'http://localhost:5000/api/users/add-friend';
+    const senderId = user._id;
+
     try {
-      const res = await axios.post(
-        '/api/users/send-friend-request',
-        { identifier: friendIdentifier },
+      const response = await axios.post(
+        url,
+        { senderId, friendEmail },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         }
       );
-      setSuccessMessage(`Friend request sent to ${friendIdentifier}`);
-      setFriendIdentifier('');
-    } catch (err) {
-      console.error('Error sending friend request:', err.response || err);
-      if (err.response?.data?.message) {
-        setSuccessMessage(err.response.data.message);
-      } else {
-        setSuccessMessage('Failed to send friend request. Please try again.');
-      }
-    } finally {
-      setTimeout(() => setSuccessMessage(''), 5000);
-    }
-  };
-
-  const acceptFriendRequest = async (id) => {
-    try {
-      await axios.patch(`/api/users/accept-friend-request/${id}`);
-      fetchFriendRequests();
+      setSuccessMessage(response.data.message);
+      setFriendEmail('');
       fetchFriends();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const rejectFriendRequest = async (id) => {
-    try {
-      await axios.patch(`/api/users/reject-friend-request/${id}`);
-      fetchFriendRequests();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error('Error adding friend:', error.response || error);
+      setErrorMessage(
+        error.response?.data?.message || 'Failed to add friend. Please try again.'
+      );
+    } finally {
+      setTimeout(() => {
+        setSuccessMessage('');
+        setErrorMessage('');
+      }, 5000);
     }
   };
 
@@ -113,43 +87,31 @@ const Profile = () => {
       </div>
 
       <div style={styles.section}>
-        <h3 style={styles.subtitle}>Send Friend Request</h3>
+        <h3 style={styles.subtitle}>Add Friend</h3>
         {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
+        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
         <input
-          type="text"
-          placeholder="Enter Username or Email"
-          value={friendIdentifier}
-          onChange={(e) => setFriendIdentifier(e.target.value)}
+          type="email"
+          placeholder="Enter Email"
+          value={friendEmail}
+          onChange={(e) => setFriendEmail(e.target.value)}
           style={styles.input}
         />
-        <button onClick={sendFriendRequest} style={styles.button}>Send Request</button>
+        <button onClick={addFriend} style={styles.button}>Add Friend</button>
       </div>
 
       <div style={styles.section}>
-        <h3 style={styles.subtitle}>Friend Requests</h3>
-        {friendRequests.length === 0 ? (
-          <p>No pending requests</p>
-        ) : (
-          friendRequests.map((request) => (
-            <div key={request.userId} style={styles.request}>
-              <span>{request.username}</span>
-              <button onClick={() => acceptFriendRequest(request.userId)} style={styles.acceptButton}>Accept</button>
-              <button onClick={() => rejectFriendRequest(request.userId)} style={styles.rejectButton}>Reject</button>
-            </div>
-          ))
-        )}
-      </div>
-
-      <div style={styles.section}>
-        <h3 style={styles.subtitle}>Friends</h3>
-        {friends.length === 0 ? (
-          <p>You have no friends</p>
-        ) : (
+        <h3 style={styles.subtitle}>Friends List</h3>
+        {friends.length > 0 ? (
           friends.map((friend) => (
             <div key={friend._id} style={styles.friend}>
-              <Link to={`/profile/${friend._id}`} style={styles.friendLink}>{friend.username}</Link>
+              <Link to={`/profile/${friend._id}`} style={styles.friendLink}>
+                {friend.username}
+              </Link>
             </div>
           ))
+        ) : (
+          <p style={styles.noFriends}>You have no friends yet.</p>
         )}
       </div>
     </div>
@@ -236,6 +198,7 @@ const styles = {
     marginTop: '20px',
     padding: '20px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    color: '#2c3e50',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     width: '100%',
@@ -256,26 +219,6 @@ const styles = {
     border: '1px solid #ddd',
     boxSizing: 'border-box',
     fontFamily: 'Funnel Sans, sans-serif',
-    color: '#2c3e50',
-  },
-  request: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '10px',
-  },
-  acceptButton: {
-    backgroundColor: '#28a745',
-    color: '#fff',
-    padding: '6px 12px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  rejectButton: {
-    backgroundColor: '#dc3545',
-    color: '#fff',
-    padding: '6px 12px',
-    borderRadius: '4px',
-    cursor: 'pointer',
   },
   friend: {
     marginBottom: '10px',
@@ -290,6 +233,11 @@ const styles = {
   },
   successMessage: {
     color: '#28a745',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+  },
+  errorMessage: {
+    color: '#dc3545',
     fontWeight: 'bold',
     marginBottom: '10px',
   },

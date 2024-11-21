@@ -20,28 +20,11 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   friends: [
     { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'User' 
     }
-  ],
-  friendRequests: [
-    {
-      userId: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
-      },
-      status: { 
-        type: String, 
-        enum: ['pending', 'accepted', 'rejected'], 
-        default: 'pending' 
-      },
-    },
   ],
 });
 

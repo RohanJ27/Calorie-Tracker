@@ -255,7 +255,6 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ddd',
     boxSizing: 'border-box',
-    fontSize: '16px',
     fontFamily: 'Funnel Sans, sans-serif',
     color: '#2c3e50',
   },

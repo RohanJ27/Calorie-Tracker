@@ -17,10 +17,12 @@ const Navbar = () => {
 
   const handleDarkModeToggle = () => {
     
+
     if (document.body.style.filter != 'invert(100%) hue-rotate(180deg)')
     {
       document.body.style.filter = 'invert(100%) hue-rotate(180deg)';
       document.getElementById("togTex").innerText = "Dark";
+      
     }
     else
     {
@@ -46,9 +48,9 @@ const Navbar = () => {
             />
           <span class="slider round"></span>
         </label>
-        
+        <p class="toggleText" id ="togTex">Light</p>
       </div>
-      <p class="toggleText" id ="togTex">Light</p>
+      
       <div className="nav-links">
         <Link to="/search" className="nav-link">Search Recipes</Link>
         {auth ? (

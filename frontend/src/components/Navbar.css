@@ -15,6 +15,8 @@
   .logo {
     font-size: 24px;
     font-weight: bold;
+    gap: 10px;
+    margin-right: auto; 
   }
   
   .logo-text {
@@ -55,6 +57,7 @@
     .nav-links {
       flex-direction: column;
       position: absolute;
+      
       top: 60px;
       right: 0;
       background-color: #033500;
@@ -88,8 +91,13 @@
   }
   
   .toggle-container {
-    position: absolute; 
-    left: 200px;         
+    
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    justify-content: space-between;
+    margin-left: 20px; 
+    margin-right: 800px;    
   }
 
   .switch {
@@ -154,8 +162,7 @@
   }
 
   .toggleText {
-    position: absolute;
-    right: 1125px;
+   
     font-weight: bold;
   }
 

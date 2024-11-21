@@ -13,8 +13,8 @@ const Profile = () => {
     navigate('/login');
   };
 
-  if(!user) {
-    return <p>Loading profile...</p>
+  if (!user) {
+    return <p>Loading profile...</p>;
   }
 
   return (
@@ -24,12 +24,23 @@ const Profile = () => {
         <p style={styles.email}>Email: {user.email}</p>
       </div>
       <div style={styles.buttons}>
-        <Link to="/upload" style={styles.button}>
+        {/* Navigate to Upload Recipe page */}
+        <button
+          onClick={() => navigate('/upload')}
+          style={styles.button}
+        >
           Upload Recipe
-        </Link>
-        <Link to="/search" style={styles.button}>
+        </button>
+
+        {/* Navigate to Search Recipes page */}
+        <button
+          onClick={() => navigate('/search')}
+          style={styles.button}
+        >
           Search Recipes
-        </Link>
+        </button>
+
+        {/* Logout button */}
         <button onClick={handleLogout} style={styles.logoutButton}>
           Logout
         </button>
@@ -88,17 +99,17 @@ const styles = {
     padding: '14px',
     backgroundColor: '#033500',
     color: '#fff',
-    textDecoration: 'none',
+    border: 'none',
     borderRadius: '8px',
     fontWeight: 'bold',
     fontSize: '18px',
-    textAlign: 'center',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
     textTransform: 'uppercase',
     letterSpacing: '1px',
     width: '100%',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
   },
   logoutButton: {
     padding: '14px',
@@ -114,12 +125,6 @@ const styles = {
     letterSpacing: '1px',
     width: '100%',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  loading: {
-    textAlign: 'center',
-    marginTop: '50px',
-    fontSize: '18px',
-    color: '#fff',
   },
 };
 

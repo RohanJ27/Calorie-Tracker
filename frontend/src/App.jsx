@@ -11,7 +11,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext'; 
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
+<<<<<<< HEAD
 import AuthSuccess from './components/AuthSuccess'; 
+=======
+import UploadRecipe from './components/UploadRecipe'; // New import
+>>>>>>> c9898b1 (I added the form and started adding it to the search)
 
 function App() {
   return (
@@ -49,9 +53,21 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+<<<<<<< HEAD
                 {}
                 <Route path="/auth/success" element={<AuthSuccess />} />
                 {}
+=======
+                <Route
+                  path="/upload"
+                  element={
+                    <ProtectedRoute>
+                      <UploadRecipe />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* Redirect all unknown routes to Home */}
+>>>>>>> c9898b1 (I added the form and started adding it to the search)
                 <Route path="*" element={<Home />} />
               </Routes>
             </div>

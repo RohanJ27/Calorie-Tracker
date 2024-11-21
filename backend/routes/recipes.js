@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 const dotenv = require('dotenv');
+const Recipe = require('../models/Recipe'); 
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ const parseRange = (rangeStr) => {
   const max = Number(maxStr) || Infinity;
   return [min, max];
 };
+
+
 
 router.get('/search', auth, async (req, res) => {
   const {
@@ -32,7 +35,7 @@ router.get('/search', auth, async (req, res) => {
     app_key: process.env.EDAMAM_APP_KEY,
     q: ingredients || '',
     from: parseInt(from) || 0,
-    to: parseInt(to) || 100, 
+    to: parseInt(to) || 100,
   };
 
   if (diet) params.diet = diet;
@@ -85,7 +88,7 @@ router.get('/search', auth, async (req, res) => {
 
     const total = recipes.length;
 
-    recipes = recipes.slice(0, 20); 
+    recipes = recipes.slice(0, 20);
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
@@ -98,7 +101,38 @@ router.get('/search', auth, async (req, res) => {
     res.json({ recipes, total, score: updatedUser.score });
   } catch (error) {
     console.error('🛑 Edamam API Error:', error.message);
+<<<<<<< HEAD
     res.status(500).json({ msg: 'Error fetching recipes from Edamam API' });
+=======
+    res.status(500).json({ error: 'Failed to fetch recipes' });
+  }
+});
+
+
+router.post('/upload', auth, async (req, res) => {
+  const { label, image, source, url, ingredients, calories, dietLabels, healthLabels, totalNutrients } = req.body;
+
+  try {
+    const newRecipe = new Recipe({
+      userId: req.user._id, 
+      label,
+      image,
+      source,
+      url,
+      ingredients,
+      calories,
+      dietLabels,
+      healthLabels,
+      totalNutrients,
+    });
+
+    await newRecipe.save();
+
+    res.status(201).json({ message: 'Recipe uploaded successfully!', recipe: newRecipe });
+  } catch (error) {
+    console.error('🛑 Error uploading recipe:', error.message);
+    res.status(500).json({ error: 'Failed to upload recipe' });
+>>>>>>> c9898b1 (I added the form and started adding it to the search)
   }
 });
 

@@ -7,7 +7,7 @@ const Profile = () => {
   const { user, setAuth, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
-  const [friendEmail, setFriendEmail] = useState('');  // Changed to friendEmail
+  const [friendEmail, setFriendEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -37,6 +37,9 @@ const Profile = () => {
   };
 
   const addFriend = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+
     if (!friendEmail.trim()) {
       setErrorMessage('Email cannot be empty.');
       setTimeout(() => setErrorMessage(''), 5000);

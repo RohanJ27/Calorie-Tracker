@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const UploadRecipeForm = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const UploadRecipeForm = () => {
     healthLabels: '',
     image: '',
   });
+
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +26,7 @@ const UploadRecipeForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust token handling as needed
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is present
         },
         body: JSON.stringify(formData),
       });
@@ -32,6 +35,7 @@ const UploadRecipeForm = () => {
         const result = await response.json();
         alert('Recipe uploaded successfully!');
         console.log('Uploaded Recipe:', result);
+        navigate('/profile'); // Redirect to profile page after successful upload
       } else {
         throw new Error('Failed to upload recipe');
       }

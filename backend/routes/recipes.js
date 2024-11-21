@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 const dotenv = require('dotenv');
+const User = require('../models/User'); // Import the User model
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ router.get('/search', auth, async (req, res) => {
   if (calories) params.calories = calories;
 
   Object.keys(params).forEach((key) => {
-    if (!params[key]) {
+    if (params[key] === undefined || params[key] === null) {
       delete params[key];
     }
   });
@@ -88,19 +89,19 @@ router.get('/search', auth, async (req, res) => {
 
     recipes = recipes.slice(0, 20); 
 
-    res.json({ recipes, total });
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { $inc: { score: 1 } },
+      { new: true }
+    );
+
+    console.log(`User ${req.user.id} new score: ${updatedUser.score}`);
+
+    res.json({ recipes, total, score: updatedUser.score });
   } catch (error) {
-    console.log('🛑 Entered catch block');
-    console.log('Edamam App ID:', process.env.EDAMAM_APP_ID);
-    console.log('Edamam App Key:', process.env.EDAMAM_APP_KEY);
     console.error('🛑 Edamam API Error:', error.message);
-  
-    res.status(error.response ? error.response.status : 500).json({
-      message: 'Failed to fetch recipes from Edamam API.',
-      error: error.response ? error.response.data : error.message,
-    });
+    res.status(500).json({ msg: 'Error fetching recipes from Edamam API' });
   }
-  
 });
 
 module.exports = router;

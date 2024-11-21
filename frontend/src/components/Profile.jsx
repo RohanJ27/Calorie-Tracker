@@ -50,6 +50,14 @@ const Profile = () => {
     const senderId = user._id;
 
     try {
+      const existingFriend = user.friends.find(friend => friend.email === friendEmail);
+    
+      if (existingFriend) {
+        setErrorMessage('You are already friends with this person.');
+        setTimeout(() => setErrorMessage(''), 5000);
+        return;
+      }
+  
       const response = await axios.post(
         url,
         { senderId, friendEmail },

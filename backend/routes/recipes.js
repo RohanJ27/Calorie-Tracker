@@ -90,8 +90,17 @@ router.get('/search', auth, async (req, res) => {
 
     res.json({ recipes, total });
   } catch (error) {
+    console.log('🛑 Entered catch block');
+    console.log('Edamam App ID:', process.env.EDAMAM_APP_ID);
+    console.log('Edamam App Key:', process.env.EDAMAM_APP_KEY);
     console.error('🛑 Edamam API Error:', error.message);
+  
+    res.status(error.response ? error.response.status : 500).json({
+      message: 'Failed to fetch recipes from Edamam API.',
+      error: error.response ? error.response.data : error.message,
+    });
   }
+  
 });
 
 module.exports = router;

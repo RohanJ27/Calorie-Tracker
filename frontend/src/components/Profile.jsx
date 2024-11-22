@@ -50,14 +50,6 @@ const Profile = () => {
     const senderId = user._id;
 
     try {
-      const existingFriend = user.friends.find(friend => friend.email === friendEmail);
-    
-      if (existingFriend) {
-        setErrorMessage('You are already friends with this person.');
-        setTimeout(() => setErrorMessage(''), 5000);
-        return;
-      }
-  
       const response = await axios.post(
         url,
         { senderId, friendEmail },
@@ -101,14 +93,23 @@ const Profile = () => {
         <h3 style={styles.subtitle}>Add Friend</h3>
         {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
         {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={friendEmail}
-          onChange={(e) => setFriendEmail(e.target.value)}
-          style={styles.input}
-        />
-        <button onClick={addFriend} style={styles.button}>Add Friend</button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addFriend();
+          }}
+        >
+          <input
+            type="email"
+            placeholder="Enter Email"
+            value={friendEmail}
+            onChange={(e) => setFriendEmail(e.target.value)}
+            style={styles.input}
+          />
+          <button type="submit" style={styles.button}>
+            Add Friend
+          </button>
+        </form>
       </div>
 
       <div style={styles.section}>

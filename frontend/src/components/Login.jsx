@@ -40,9 +40,11 @@ const Login = () => {
 
       console.log('Login successful:', res.data);
 
+      // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       setAuth(true);
 
+      // Fetch user data using the token
       const userRes = await axios.get('http://localhost:5000/api/users/me', {
         headers: {
           Authorization: `Bearer ${res.data.token}`,
@@ -51,6 +53,9 @@ const Login = () => {
 
       const userData = userRes.data;
       setUser(userData);
+
+      // Navigate to profile
+      navigate('/profile');
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.data && err.response.data.message) {
@@ -68,18 +73,30 @@ const Login = () => {
     console.log('Google login success:', response);
     const { credential } = response;
 
+    setError(null);
+    setLoading(true);
+
     try {
       const res = await axios.post('http://localhost:5000/api/users/google-login', {
         token: credential,
       });
 
+      console.log('Google Login successful:', res.data);
+
+      // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       setAuth(true);
       setUser(res.data.user);
       navigate('/profile');
     } catch (err) {
       console.error('Google login error:', err);
-      setError('Google login failed. Please try again.');
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Google login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,7 +152,7 @@ const Login = () => {
   );
 };
 
-// **Add styles for the divider**
+// **Styles for the Login Component**
 const styles = {
   container: {
     display: 'flex',
@@ -146,7 +163,7 @@ const styles = {
     height: '100vh',
     padding: '20px',
     backgroundColor: '#f5f5f5',
-    fontFamily: 'Funnel Sans',
+    fontFamily: 'Funnel Sans, sans-serif',
     boxSizing: 'border-box',
     overflow: 'hidden',
     backgroundImage:
@@ -167,6 +184,9 @@ const styles = {
   error: {
     color: 'red',
     marginBottom: '15px',
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    padding: '10px',
+    borderRadius: '5px',
   },
   form: {
     display: 'flex',
@@ -174,38 +194,36 @@ const styles = {
     width: '100%',
     maxWidth: '400px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    padding: '20px',
+    padding: '30px',
     borderRadius: '8px',
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
   },
   formGroup: {
-    marginBottom: '15px',
+    marginBottom: '20px',
   },
   label: {
-    marginBottom: '5px',
+    marginBottom: '8px',
     fontWeight: 'bold',
     display: 'block',
     color: '#2c3e50',
+    fontSize: '16px',
   },
   input: {
-    padding: '10px',
+    padding: '12px',
     width: '100%',
     boxSizing: 'border-box',
     borderRadius: '5px',
     border: '1px solid #ccc',
-<<<<<<< Updated upstream
-=======
     fontSize: '16px',
->>>>>>> Stashed changes
   },
   button: {
-    padding: '12px',
+    padding: '14px',
     backgroundColor: '#033500',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',
     fontWeight: 'bold',
-    fontSize: '16px',
+    fontSize: '18px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
     textTransform: 'uppercase',

@@ -1,3 +1,5 @@
+// signup.jsx
+
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -36,10 +38,11 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/users/signup', {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/signup`, {
         username,
         email,
         password,
+        authMethod: 'traditional', // Indicate traditional signup
       });
 
       console.log('Signup successful:', res.data);
@@ -48,19 +51,13 @@ const Signup = () => {
       localStorage.setItem('token', res.data.token);
       setAuth(true);
 
-      // Fetch user data using the token
-      const userRes = await axios.get('http://localhost:5000/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${res.data.token}`,
-        },
-      });
-
-      setUser(userRes.data);
+      // Set user data
+      setUser(res.data.user);
 
       // Navigate to profile
       navigate('/profile');
     } catch (err) {
-      console.error('Signup error:', err);
+      console.error('Signup error:', err.response || err.message);
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
@@ -76,18 +73,35 @@ const Signup = () => {
     console.log('Google signup success:', response);
     const { credential } = response;
 
+    setError(null);
+    setLoading(true);
+
     try {
-      const res = await axios.post('http://localhost:5000/api/users/google-login', {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/signup`, {
         token: credential,
+        authMethod: 'google', // Indicate Google signup
       });
 
+      console.log('Google Signup successful:', res.data);
+
+      // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       setAuth(true);
+
+      // Set user data
       setUser(res.data.user);
+
+      // Navigate to profile
       navigate('/profile');
     } catch (err) {
-      console.error('Google signup error:', err);
-      setError('Google signup failed. Please try again.');
+      console.error('Google signup error:', err.response || err.message);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Google signup failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,7 +127,7 @@ const Signup = () => {
             name="username"
             value={username}
             onChange={onChange}
-            required
+            required={true} // Ensure this is conditionally required based on authMethod
             style={styles.input}
           />
         </div>
@@ -127,7 +141,7 @@ const Signup = () => {
             name="email"
             value={email}
             onChange={onChange}
-            required
+            required={true} // Ensure this is conditionally required based on authMethod
             style={styles.input}
           />
         </div>
@@ -141,7 +155,7 @@ const Signup = () => {
             name="password"
             value={password}
             onChange={onChange}
-            required
+            required={true} // Ensure this is conditionally required based on authMethod
             style={styles.input}
           />
         </div>
@@ -155,23 +169,23 @@ const Signup = () => {
             name="password2"
             value={password2}
             onChange={onChange}
-            required
+            required={true} // Ensure this is conditionally required based on authMethod
             style={styles.input}
           />
         </div>
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
         </button>
-        {/* **Add a divider or spacing before GoogleLogin** */}
+        {/* Divider or spacing before GoogleLogin */}
         <div style={styles.orDivider}>OR</div>
-        {/* **GoogleLogin Component** */}
+        {/* GoogleLogin Component */}
         <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </form>
     </div>
   );
 };
 
-// **Add styles for the divider and existing styles**
+// **Styles for the Signup Component**
 const styles = {
   container: {
     display: 'flex',

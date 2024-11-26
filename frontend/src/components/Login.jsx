@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google'; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,7 +51,6 @@ const Login = () => {
 
       const userData = userRes.data;
       setUser(userData);
-
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.data && err.response.data.message) {
@@ -61,6 +61,31 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // **Google OAuth Response Handlers**
+  const responseMessage = async (response) => {
+    console.log('Google login success:', response);
+    const { credential } = response;
+
+    try {
+      const res = await axios.post('http://localhost:5000/api/users/google-login', {
+        token: credential,
+      });
+
+      localStorage.setItem('token', res.data.token);
+      setAuth(true);
+      setUser(res.data.user);
+      navigate('/profile');
+    } catch (err) {
+      console.error('Google login error:', err);
+      setError('Google login failed. Please try again.');
+    }
+  };
+
+  const errorMessage = (error) => {
+    console.log('Google login error:', error);
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -101,11 +126,16 @@ const Login = () => {
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
+        {/* **Add a divider or spacing before GoogleLogin** */}
+        <div style={styles.orDivider}>OR</div>
+        {/* **GoogleLogin Component** */}
+        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </form>
     </div>
   );
 };
 
+// **Add styles for the divider**
 const styles = {
   container: {
     display: 'flex',
@@ -163,6 +193,10 @@ const styles = {
     boxSizing: 'border-box',
     borderRadius: '5px',
     border: '1px solid #ccc',
+<<<<<<< Updated upstream
+=======
+    fontSize: '16px',
+>>>>>>> Stashed changes
   },
   button: {
     padding: '12px',
@@ -177,6 +211,12 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  orDivider: {
+    textAlign: 'center',
+    margin: '20px 0',
+    fontWeight: 'bold',
+    color: '#2c3e50',
   },
 };
 

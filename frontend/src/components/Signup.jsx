@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -70,6 +71,31 @@ const Signup = () => {
     }
   };
 
+  // **Google OAuth Response Handlers**
+  const responseMessage = async (response) => {
+    console.log('Google signup success:', response);
+    const { credential } = response;
+
+    try {
+      const res = await axios.post('http://localhost:5000/api/users/google-login', {
+        token: credential,
+      });
+
+      localStorage.setItem('token', res.data.token);
+      setAuth(true);
+      setUser(res.data.user);
+      navigate('/profile');
+    } catch (err) {
+      console.error('Google signup error:', err);
+      setError('Google signup failed. Please try again.');
+    }
+  };
+
+  const errorMessage = (error) => {
+    console.log('Google signup error:', error);
+    setError('Google signup failed. Please try again.');
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -136,11 +162,16 @@ const Signup = () => {
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
         </button>
+        {/* **Add a divider or spacing before GoogleLogin** */}
+        <div style={styles.orDivider}>OR</div>
+        {/* **GoogleLogin Component** */}
+        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </form>
     </div>
   );
 };
 
+// **Add styles for the divider and existing styles**
 const styles = {
   container: {
     display: 'flex',
@@ -154,7 +185,8 @@ const styles = {
     fontFamily: 'Funnel Sans, sans-serif',
     boxSizing: 'border-box',
     overflow: 'hidden',
-    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundImage:
+      'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -216,6 +248,12 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  orDivider: {
+    textAlign: 'center',
+    margin: '20px 0',
+    fontWeight: 'bold',
+    color: '#2c3e50',
   },
 };
 

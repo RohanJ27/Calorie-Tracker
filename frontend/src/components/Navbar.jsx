@@ -4,14 +4,15 @@ import AuthContext from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { auth, setAuth, setUser } = useContext(AuthContext);
+  const { auth, user, setAuth, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   
   
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setToken(null);
+    setAuth(false);
+    setUser(null);
     navigate('/login');
   };
 
@@ -55,6 +56,10 @@ const Navbar = () => {
         <Link to="/search" className="nav-link">Search Recipes</Link>
         {auth ? (
           <>
+            {/* Display User's Score */}
+            {user && (
+              <span className="user-score">Score: {user.score}</span>
+            )}
             <Link to="/profile" className="nav-link">Account Details</Link>
             <button onClick={handleLogout} className="logout-button">Logout</button>
           </>

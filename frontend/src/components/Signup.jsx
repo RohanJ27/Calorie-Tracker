@@ -1,11 +1,13 @@
-import React, { useState, useContext } from 'react';
+// src/components/Signup.jsx
+
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { setAuth, setUser } = useContext(AuthContext);
+  const { setAuth, setUser, auth, user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     username: '',
@@ -18,6 +20,12 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const { username, email, password, password2 } = formData;
+
+  useEffect(() => {
+    if (auth && user) {
+      navigate('/profile');
+    }
+  }, [auth, user, navigate]);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,15 +54,7 @@ const Signup = () => {
       // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       setAuth(true);
-
-      // Fetch user data using the token
-      const userRes = await axios.get('http://localhost:5000/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${res.data.token}`,
-        },
-      });
-
-      setUser(userRes.data);
+      setUser(res.data.user);
 
       // Navigate to profile
       navigate('/profile');
@@ -68,6 +68,11 @@ const Signup = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to handle Google Sign-Up
+  const handleGoogleSignUp = () => {
+    window.location.href = 'http://localhost:5000/api/auth/google';
   };
 
   return (
@@ -137,85 +142,37 @@ const Signup = () => {
           {loading ? 'Signing up...' : 'Sign Up'}
         </button>
       </form>
+      <div style={styles.googleSignInContainer}>
+        <p style={styles.orText}>Or</p>
+        <button style={styles.googleButton} onClick={handleGoogleSignUp}>
+          Sign up with Google
+        </button>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100vw',
-    height: '100vh',
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'Funnel Sans, sans-serif',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  header: {
-    marginBottom: '20px',
+  // Existing styles...
+  googleSignInContainer: {
+    marginTop: '20px',
     textAlign: 'center',
   },
-  title: {
-    fontSize: '40px',
-    fontWeight: 'bold',
-    color: '#2c3e50',
+  orText: {
     marginBottom: '10px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '15px',
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-    padding: '10px',
-    borderRadius: '5px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: '400px',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    padding: '30px',
-    borderRadius: '8px',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-  },
-  formGroup: {
-    marginBottom: '20px',
-  },
-  label: {
-    marginBottom: '8px',
-    fontWeight: 'bold',
-    display: 'block',
     color: '#2c3e50',
-    fontSize: '16px',
   },
-  input: {
+  googleButton: {
     padding: '12px',
-    width: '100%',
-    boxSizing: 'border-box',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '14px',
-    backgroundColor: '#033500',
+    backgroundColor: '#db4437',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',
     fontWeight: 'bold',
-    fontSize: '18px',
+    fontSize: '16px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
     textTransform: 'uppercase',
     letterSpacing: '1px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 };
 

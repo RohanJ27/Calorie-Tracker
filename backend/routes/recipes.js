@@ -73,7 +73,6 @@ router.get('/search', auth, async (req, res) => {
         const recipeProtein = recipe.totalNutrients.PROCNT?.quantity || 0;
         const recipeFat = recipe.totalNutrients.FAT?.quantity || 0;
         const recipeCarbs = recipe.totalNutrients.CHOCDF?.quantity || 0;
-
         const meetsProtein =
           !protein || (recipeProtein >= minProtein && recipeProtein <= maxProtein);
         const meetsFat =

@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,9 +10,10 @@ import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthProvider from './context/AuthProvider';
+import { AuthProvider } from './context/AuthContext'; // Updated import
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
+import AuthSuccess from './components/AuthSuccess'; // Import AuthSuccess component
 
 function App() {
   return (
@@ -48,6 +51,8 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                {/* Route to handle Google authentication success */}
+                <Route path="/auth/success" element={<AuthSuccess />} />
                 {/* Redirect all unknown routes to Home */}
                 <Route path="*" element={<Home />} />
               </Routes>

@@ -1,5 +1,3 @@
-// routes/users.js
-
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
@@ -92,7 +90,7 @@ router.post(
   }
 );
 
-// User login
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -134,7 +132,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get user profile
+
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password -googleId');

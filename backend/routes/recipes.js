@@ -3,7 +3,6 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 const dotenv = require('dotenv');
-const User = require('../models/User'); // Import the User model
 
 dotenv.config();
 

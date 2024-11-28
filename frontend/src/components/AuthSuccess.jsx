@@ -1,5 +1,3 @@
-// src/components/AuthSuccess.jsx
-
 import React, { useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';

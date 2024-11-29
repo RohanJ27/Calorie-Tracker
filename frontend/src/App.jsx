@@ -12,6 +12,7 @@ import AuthProvider from './context/AuthProvider';
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 
+
 function App() {
   return (
     <Router>

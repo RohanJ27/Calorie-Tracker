@@ -10,6 +10,7 @@ const Profile = () => {
   const [friendEmail, setFriendEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -17,13 +18,32 @@ const Profile = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [friends]);
+
   const fetchFriends = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`/api/users/friends/${user._id}`, {
+      if (!token) {
+        console.error('No authentication token found.');
+        setErrorMessage('No authentication token found.');
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await axios.get(`http://localhost:5000/api/users/friends/${user._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setFriends(response.data.friends || []);
+
+      if (response.data && response.data.friends) {
+        setFriends(response.data.friends);
+      } else {
+        console.warn('No friends data received.');
+        setFriends([]);
+      }
+
+      setIsLoading(false);
     } catch (error) {
       console.error('Failed to fetch friends:', error);
       setErrorMessage('Unable to load friends list.');
@@ -48,13 +68,12 @@ const Profile = () => {
     }
 
     const url = 'http://localhost:5000/api/users/add-friend';
-    const senderId = user._id;
 
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
         url,
-        { senderId: user._id, friendEmail },
+        { friendEmail },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -117,13 +136,20 @@ const Profile = () => {
       <div style={styles.section}>
         <h3 style={styles.subtitle}>Friends List</h3>
         {friends.length > 0 ? (
-          friends.map((friend) => (
-            <div key={friend._id} style={styles.friend}>
-              <Link to={`/profile/${friend._id}`} style={styles.friendLink}>
-                {friend.username}
-              </Link>
-            </div>
-          ))
+          friends.map((friend) => {
+            if (!friend._id || !friend.username || !friend.email) {
+              console.warn('Incomplete friend data:', friend);
+              return null;
+            }
+            return (
+              <div key={friend._id} style={styles.friend}>
+                <Link to={`/profile/${friend._id}`} style={styles.friendLink}>
+                  {friend.username}
+                </Link>
+                <span style={styles.friendEmail}> - {friend.email}</span>
+              </div>
+            );
+          })
         ) : (
           <p style={styles.noFriends}>You have no friends yet.</p>
         )}

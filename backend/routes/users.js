@@ -150,24 +150,22 @@ router.post('/add-friend', auth, async (req, res) => {
       return res.status(400).json({ message: 'You cannot send a friend request to yourself.' });
     }
 
-    const updatedRecipient = await User.findByIdAndUpdate(
+    const alreadyFriend = recipient.friends.includes(senderId);
+    if (alreadyFriend) {
+      return res.status(400).json({ message: 'You are already friends.' });
+    }    
+
+    await User.findByIdAndUpdate(
       recipient._id,
       { $addToSet: { friends: senderId } },
       { new: true }
     );
 
-    const updatedSender = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       senderId,
       { $addToSet: { friends: recipient._id } },
       { new: true }
     );
-
-    if (
-      updatedRecipient.friends.length === recipient.friends.length &&
-      updatedSender.friends.length === (await User.findById(senderId)).friends.length
-    ) {
-      return res.status(400).json({ message: 'You are already friends.' });
-    }
 
     res.status(200).json({ message: 'You are now friends.' });
   } catch (err) {
@@ -176,7 +174,7 @@ router.post('/add-friend', auth, async (req, res) => {
   }
 });
 
-router.get('/friends/:id', async (req, res) => {
+router.get('/friends/:id', auth, async (req, res) => {
   const { id } = req.params;
 
   if (id !== req.user.id) {
@@ -184,11 +182,15 @@ router.get('/friends/:id', async (req, res) => {
   }
 
   try {
-    const user = await User.findById(id).populate('friends', 'username email');
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await User.findById(id).populate('username', 'email').exec();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json({ friends: user.friends });
   } catch (error) {
+    console.error('Friends Fetch Error:', error.message);
     res.status(500).json({ message: "Server error" });
   }
 });

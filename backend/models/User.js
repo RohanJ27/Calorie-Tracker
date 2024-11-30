@@ -23,9 +23,15 @@ const UserSchema = new mongoose.Schema({
   friends: [
     { 
       type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User' 
+      ref: 'User',
+      unique: true,
     }
   ],
+});
+
+UserSchema.pre('save', function (next) {
+  this.friends = [...new Set(this.friends.map(friend => friend.toString()))];
+  next();
 });
 
 module.exports = mongoose.model('User', UserSchema);

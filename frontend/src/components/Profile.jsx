@@ -19,8 +19,9 @@ const Profile = () => {
 
   const fetchFriends = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`/api/users/friends/${user._id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setFriends(response.data.friends || []);
     } catch (error) {
@@ -50,11 +51,12 @@ const Profile = () => {
     const senderId = user._id;
 
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         url,
-        { senderId, friendEmail },
+        { senderId: user._id, friendEmail },
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       setSuccessMessage(response.data.message);

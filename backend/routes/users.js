@@ -133,11 +133,14 @@ router.get('/profile', auth, async (req, res) => {
   }
 });
 
-router.post('/add-friend', async (req, res) => {
-  const { senderId, friendEmail } = req.body;
+router.post('/add-friend', auth, async (req, res) => {
+  const { friendEmail } = req.body;
+  const senderId = req.user.id;
 
   try {
-    const recipient = await User.findOne({ email: friendEmail });
+    const normalizedEmail = friendEmail.toLowerCase();
+
+    const recipient = await User.findOne({ email: normalizedEmail });
 
     if (!recipient) {
       return res.status(404).json({ message: 'User not found.' });
@@ -147,16 +150,23 @@ router.post('/add-friend', async (req, res) => {
       return res.status(400).json({ message: 'You cannot send a friend request to yourself.' });
     }
 
-    const sender = await User.findById(senderId);
+    const updatedRecipient = await User.findByIdAndUpdate(
+      recipient._id,
+      { $addToSet: { friends: senderId } },
+      { new: true }
+    );
 
-    if (!recipient.friends.includes(senderId)) {
-      recipient.friends.push(senderId);
-      await recipient.save();
-    }
+    const updatedSender = await User.findByIdAndUpdate(
+      senderId,
+      { $addToSet: { friends: recipient._id } },
+      { new: true }
+    );
 
-    if (!sender.friends.includes(recipient._id)) {
-      sender.friends.push(recipient._id);
-      await sender.save();
+    if (
+      updatedRecipient.friends.length === recipient.friends.length &&
+      updatedSender.friends.length === (await User.findById(senderId)).friends.length
+    ) {
+      return res.status(400).json({ message: 'You are already friends.' });
     }
 
     res.status(200).json({ message: 'You are now friends.' });
@@ -168,6 +178,10 @@ router.post('/add-friend', async (req, res) => {
 
 router.get('/friends/:id', async (req, res) => {
   const { id } = req.params;
+
+  if (id !== req.user.id) {
+    return res.status(403).json({ message: 'Access denied.' });
+  }
 
   try {
     const user = await User.findById(id).populate('friends', 'username email');

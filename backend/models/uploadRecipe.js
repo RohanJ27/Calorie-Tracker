@@ -12,9 +12,11 @@ const recipeSchema = new mongoose.Schema(
     dietLabels: { type: [String] },
     healthLabels: { type: [String] },
     totalNutrients: { type: Object },
+    directions: { type: String }, 
   },
-  { timestamps: true } // Adds createdAt and updatedAt timestamps
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('Recipe', recipeSchema);
+
 

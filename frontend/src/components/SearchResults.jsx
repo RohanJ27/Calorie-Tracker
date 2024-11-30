@@ -1,7 +1,5 @@
-// frontend/src/components/SearchResults.jsx
-
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
 
 const SearchResults = () => {
@@ -45,14 +43,9 @@ const SearchResults = () => {
               <p style={styles.text}>
                 <strong>Health Labels:</strong> {recipe.healthLabels.join(', ') || 'N/A'}
               </p>
-              <a
-                href={recipe.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.link}
-              >
+              <Link to={`/recipes/${recipe.id}`} style={styles.link}>
                 View Recipe
-              </a>
+              </Link>
             </div>
           </div>
         ))}

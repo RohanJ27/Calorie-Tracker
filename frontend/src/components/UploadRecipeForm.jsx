@@ -9,9 +9,8 @@ const UploadRecipeForm = () => {
     dietLabels: '',
     healthLabels: '',
     image: '',
+    directions: '', // Add directions to state
   });
-
-  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,9 +23,9 @@ const UploadRecipeForm = () => {
     // Format the data before sending it to the backend
     const formattedData = {
       ...formData,
-      ingredients: formData.ingredients.split(',').map((item) => item.trim()), // Convert ingredients to an array
-      dietLabels: formData.dietLabels.split(',').map((item) => item.trim()), // Convert dietLabels to an array
-      healthLabels: formData.healthLabels.split(',').map((item) => item.trim()), // Convert healthLabels to an array
+      ingredients: formData.ingredients.split(',').map((item) => item.trim()),
+      dietLabels: formData.dietLabels.split(',').map((item) => item.trim()),
+      healthLabels: formData.healthLabels.split(',').map((item) => item.trim()),
     };
   
     try {
@@ -36,14 +35,12 @@ const UploadRecipeForm = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is present
         },
-        body: JSON.stringify(formattedData), // Send formatted data
+        body: JSON.stringify(formattedData),
       });
   
       if (response.ok) {
-        const result = await response.json();
         alert('Recipe uploaded successfully!');
-        console.log('Uploaded Recipe:', result);
-        navigate('/profile'); // Redirect to profile page after successful upload
+        navigate('/profile'); // Redirect to profile after successful upload
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.error || 'Failed to upload recipe'}`);
@@ -53,6 +50,7 @@ const UploadRecipeForm = () => {
       alert('An error occurred while uploading the recipe.');
     }
   };
+  
   
 
   return (
@@ -99,6 +97,12 @@ const UploadRecipeForm = () => {
         name="image"
         placeholder="Image URL"
         value={formData.image}
+        onChange={handleChange}
+      />
+      <textarea
+        name="directions"
+        placeholder="Write the directions for preparing the recipe"
+        value={formData.directions}
         onChange={handleChange}
       />
       <button type="submit" style={{ marginTop: '10px' }}>Upload Recipe</button>

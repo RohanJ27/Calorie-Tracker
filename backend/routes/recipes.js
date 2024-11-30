@@ -147,9 +147,10 @@ router.get('/search', auth, async (req, res) => {
       dietLabels: recipe.dietLabels,
       healthLabels: recipe.healthLabels,
       isExternal: false,
+      // Exclude directions
     }));
 
-    // 3. Combine results and apply nutrient filters if provided
+    // 3. Combine results
     let combinedRecipes = [...edamamRecipes, ...formattedUserRecipes];
 
 >>>>>>> 8d63dc7 (Editing token decoding and connecting upload recipe to search)
@@ -249,7 +250,7 @@ router.post('/upload', auth, async (req, res) => {
  */
 router.post(
   '/upload',
-  auth, // Middleware to authenticate user
+  auth,
   [
     body('label').notEmpty().withMessage('Label is required'),
     body('ingredients').isArray({ min: 1 }).withMessage('Ingredients must be an array'),
@@ -257,13 +258,12 @@ router.post(
     body('dietLabels').optional().isArray().withMessage('Diet labels must be an array'),
     body('healthLabels').optional().isArray().withMessage('Health labels must be an array'),
     body('image').optional().isURL().withMessage('Image must be a valid URL'),
+    body('directions').optional().isString().withMessage('Directions must be a string'),
   ],
   async (req, res) => {
-    // Log incoming request body and user
     console.log('Incoming request body:', req.body);
     console.log('Authenticated user:', req.user);
 
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('Validation Errors:', errors.array());
@@ -271,14 +271,7 @@ router.post(
     }
 
     try {
-      const { label, image, source, url, ingredients, calories, dietLabels, healthLabels, totalNutrients } = req.body;
-
-      // Log what will be saved to the database
-      console.log('Saving the following recipe to the database:', { label, ingredients, calories, userId: req.user.id });
-
-      // Create the recipe with the correct userId
-      const newRecipe = new Recipe({
-        userId: req.user.id, // Use `req.user.id` instead of `req.user._id`
+      const {
         label,
         image,
         source,
@@ -288,19 +281,60 @@ router.post(
         dietLabels,
         healthLabels,
         totalNutrients,
+        directions, // Include directions
+      } = req.body;
+
+      console.log('Saving the following recipe to the database:', {
+        label,
+        ingredients,
+        calories,
+        userId: req.user.id,
+        directions,
       });
 
-      // Save the recipe to MongoDB
+      const newRecipe = new Recipe({
+        userId: req.user.id,
+        label,
+        image,
+        source,
+        url,
+        ingredients,
+        calories,
+        dietLabels,
+        healthLabels,
+        totalNutrients,
+        directions, // Save directions
+      });
+
       await newRecipe.save();
       console.log('Recipe saved successfully:', newRecipe);
 
-      // Send a success response
       res.status(201).json({ message: 'Recipe uploaded successfully!', recipe: newRecipe });
     } catch (error) {
       console.error('Error saving recipe:', error);
       res.status(500).json({ error: 'Failed to upload recipe', details: error.message });
     }
 >>>>>>> 8d63dc7 (Editing token decoding and connecting upload recipe to search)
+  }
+});
+
+/**
+ * @route   GET /api/recipes/:id
+ * @desc    Get a specific recipe by ID
+ * @access  Protected
+ */
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id).lean();
+
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+
+    res.json(recipe); // Send full recipe, including directions
+  } catch (error) {
+    console.error('Error fetching recipe:', error.message);
+    res.status(500).json({ error: 'Failed to fetch recipe' });
   }
 });
 

@@ -20,30 +20,40 @@ const UploadRecipeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Format the data before sending it to the backend
+    const formattedData = {
+      ...formData,
+      ingredients: formData.ingredients.split(',').map((item) => item.trim()), // Convert ingredients to an array
+      dietLabels: formData.dietLabels.split(',').map((item) => item.trim()), // Convert dietLabels to an array
+      healthLabels: formData.healthLabels.split(',').map((item) => item.trim()), // Convert healthLabels to an array
+    };
+  
     try {
-      const response = await fetch('http://localhost:5000/api/recipe/upload', {
+      const response = await fetch('http://localhost:5000/api/recipes/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is present
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formattedData), // Send formatted data
       });
-
+  
       if (response.ok) {
         const result = await response.json();
         alert('Recipe uploaded successfully!');
         console.log('Uploaded Recipe:', result);
         navigate('/profile'); // Redirect to profile page after successful upload
       } else {
-        throw new Error('Failed to upload recipe');
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || 'Failed to upload recipe'}`);
       }
     } catch (error) {
       console.error('Error uploading recipe:', error);
       alert('An error occurred while uploading the recipe.');
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>

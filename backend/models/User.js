@@ -17,8 +17,20 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
+    
+    required: function() {
+      return !this.googleId;
+    },
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true, 
+  },
+  avatar: {
+    type: String, 
+    default: '', 
   },
   score: {
     type: Number,
@@ -29,5 +41,9 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+
+UserSchema.index({ email: 1 });
+UserSchema.index({ googleId: 1 });
 
 module.exports = mongoose.model('User', UserSchema);

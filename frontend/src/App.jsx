@@ -8,10 +8,11 @@ import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthProvider from './context/AuthProvider';
+import { AuthProvider } from './context/AuthContext'; 
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 
+import AuthSuccess from './components/AuthSuccess'; 
 
 function App() {
   return (
@@ -50,7 +51,9 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  {/* Redirect all unknown routes to Home */}
+                  {}
+                <Route path="/auth/success" element={<AuthSuccess />} />
+                {}
                   <Route path="*" element={<Home />} />
                 </Routes>
               </div>

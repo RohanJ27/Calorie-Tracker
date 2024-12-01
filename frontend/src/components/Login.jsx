@@ -41,16 +41,10 @@ const Login = () => {
 
       localStorage.setItem('token', res.data.token);
       setAuth(true);
+      setUser(res.data.user);
 
-      const userRes = await axios.get('http://localhost:5000/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${res.data.token}`,
-        },
-      });
-
-      const userData = userRes.data;
-      setUser(userData);
-
+    
+      navigate('/profile');
     } catch (err) {
       console.error('Login error:', err);
       if (err.response && err.response.data && err.response.data.message) {
@@ -61,6 +55,10 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    window.location.href = 'http://localhost:5000/api/auth/google';
   };
 
   return (
@@ -102,6 +100,12 @@ const Login = () => {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      <div style={styles.googleSignInContainer}>
+        <p style={styles.orText}>Or</p>
+        <button style={styles.googleButton} onClick={handleGoogleSignIn}>
+          Sign in with Google
+        </button>
+      </div>
     </div>
   );
 };
@@ -164,7 +168,6 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '16px',
-
   },
   button: {
     padding: '12px',
@@ -179,6 +182,30 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  googleSignInContainer: {
+    marginTop: '20px',
+    textAlign: 'center',
+  },
+  orText: {
+    marginBottom: '10px',
+    color: '#2c3e50',
+    fontWeight: 'bold',
+    fontSize: '18px',
+  },
+  googleButton: {
+    padding: '14px',
+    backgroundColor: '#db4437',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    cursor: 'pointer',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
   },
 };
 

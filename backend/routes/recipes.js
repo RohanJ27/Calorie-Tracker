@@ -3,7 +3,6 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 const dotenv = require('dotenv');
-const User = require('../models/User'); // Import the User model
 
 dotenv.config();
 
@@ -73,7 +72,6 @@ router.get('/search', auth, async (req, res) => {
         const recipeProtein = recipe.totalNutrients.PROCNT?.quantity || 0;
         const recipeFat = recipe.totalNutrients.FAT?.quantity || 0;
         const recipeCarbs = recipe.totalNutrients.CHOCDF?.quantity || 0;
-
         const meetsProtein =
           !protein || (recipeProtein >= minProtein && recipeProtein <= maxProtein);
         const meetsFat =

@@ -23,15 +23,18 @@ const UploadRecipeForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => { // Properly structured with try-catch
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = new FormData();
     form.append('label', formData.label);
+
+    // Append ingredients as JSON string
     form.append(
       'ingredients',
       JSON.stringify(formData.ingredients.split(',').map(item => item.trim()))
     );
+
     form.append('calories', formData.calories);
 
     // Append each diet label separately
@@ -57,6 +60,11 @@ const UploadRecipeForm = () => {
     form.append('directions', formData.directions);
 
     if (formData.image) form.append('image', formData.image); // Append image if selected
+
+    // Debugging: Log FormData entries
+    for (let pair of form.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
     try {
       const token = localStorage.getItem('token');

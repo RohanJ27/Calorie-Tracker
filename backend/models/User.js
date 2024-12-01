@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
   },
+  score: {
+    type: Number,
+    default: 0,
+  },
   friends: [
     { 
       type: mongoose.Schema.Types.ObjectId, 

@@ -182,7 +182,7 @@ router.get('/friends/:id', auth, async (req, res) => {
   }
 
   try {
-    const user = await User.findById(id).populate('username', 'email').exec();
+    const user = await User.findById(id).populate('friends', 'username email').exec();
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -199,13 +199,24 @@ router.get('/profile/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(id).select('username email friends');
+    const user = await User.findById(id).select('username email score friends');
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json(user);
+    const friendsList = await User.find({ _id: { $in: user.friends } }).select('username email score');
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      score: user.score,
+      friends: friendsList.map(friend => ({
+        username: friend.username,
+        email: friend.email,
+        score: friend.score,
+      })),
+    });
   } catch (error) {
+    console.error('Error fetching profile:', error.message);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 module.exports = router;

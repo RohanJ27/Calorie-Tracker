@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Profile from './components/Profile';
+import FriendProfile from './components/FriendProfile';
 import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
@@ -29,6 +30,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile/:friendId"
+                  element={
+                    <ProtectedRoute>
+                      <FriendProfile />
                     </ProtectedRoute>
                   }
                 />

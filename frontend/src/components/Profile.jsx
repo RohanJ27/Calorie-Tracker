@@ -143,7 +143,7 @@ const Profile = () => {
             }
             return (
               <div key={friend._id} style={styles.friend}>
-                <Link to={`http://localhost:5000/api/users/profile/${friend._id}`} style={styles.friendLink}>
+                <Link to={`/profile/${friend._id}`} style={styles.friendLink}>
                   {friend.username}
                 </Link>
                 <span style={styles.friendEmail}> - {friend.email}</span>

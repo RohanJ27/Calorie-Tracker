@@ -24,6 +24,7 @@ const SearchResults = () => {
   }, [recipes, total, navigate]);
 
   if (loading) {
+
     return <div style={styles.loading}>Loading recipes...</div>;
   }
 
@@ -105,6 +106,7 @@ const styles = {
     width: '100%',
     height: '200px',
     objectFit: 'cover',
+
   },
   content: {
     padding: '20px',

@@ -4,7 +4,6 @@ import AuthContext from '../context/AuthContext';
 
 const Home = () => {
   const { auth } = useContext(AuthContext);
-
   const [signupHovered, setSignupHovered] = useState(false);
   const [loginHovered, setLoginHovered] = useState(false);
 
@@ -16,7 +15,7 @@ const Home = () => {
     <div style={styles.container}>
       <div style={styles.overlay}>
         <div style={styles.content}>
-          <h2 style={styles.title}>Welcome to RecipeFit!</h2>
+          <h2 style={styles.title}>Welcome to RecipeFit</h2>
           <p style={styles.subtitle}>Recipes That Fit Your Ingredients, Your Goals, Your Life</p>
           <div style={styles.buttons}>
             <Link

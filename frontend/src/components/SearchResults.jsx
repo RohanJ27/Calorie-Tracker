@@ -53,15 +53,9 @@ const SearchResults = () => {
               <p style={styles.text}>
                 <strong>Health Labels:</strong> {recipe.healthLabels.join(', ') || 'N/A'}
               </p>
-<<<<<<< HEAD
-              <button onClick={() => handleViewRecipe(recipe)} style={styles.link}>
-                View Recipe
-              </button>
-=======
               <Link to={`/recipes/${recipe.id}`} style={styles.link}>
                 View Recipe
               </Link>
->>>>>>> main
             </div>
           </div>
         ))}

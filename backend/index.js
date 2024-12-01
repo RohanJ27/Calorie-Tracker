@@ -44,11 +44,7 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB
 mongoose
-<<<<<<< HEAD
-  .connect(process.env.MONGO_URI) // Removed deprecated options
-=======
   .connect(process.env.MONGO_URI)
->>>>>>> main
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch((err) => {
     console.error('❌ MongoDB connection failed:', err.message);

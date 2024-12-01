@@ -11,14 +11,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
-<<<<<<< HEAD
 import AuthSuccess from './components/AuthSuccess';
 import UploadRecipe from './components/UploadRecipe';
 import RecipeDetails from './components/RecipeDetails'; // Add RecipeDetails component
-=======
-import UploadRecipe from './components/UploadRecipe'
-import RecipeDetails from './components/RecipeDetails';
->>>>>>> main
 
 function App() {
   return (
@@ -56,10 +51,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-<<<<<<< HEAD
                 <Route path="/auth/success" element={<AuthSuccess />} />
-=======
->>>>>>> main
                 <Route
                   path="/upload"
                   element={
@@ -68,7 +60,6 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-<<<<<<< HEAD
                 {/* Add the RecipeDetails route */}
                 <Route
                   path="/recipes/:id"
@@ -78,17 +69,6 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-=======
-                <Route
-                  path="/recipes/:id" // Add this route
-                  element={
-                    <ProtectedRoute>
-                      <RecipeDetails /> {/* Use the RecipeDetails component */}
-                    </ProtectedRoute>
-                  }
-                />
-                {/* Redirect all unknown routes to Home */}
->>>>>>> main
                 <Route path="*" element={<Home />} />
               </Routes>
             </div>

@@ -57,7 +57,6 @@ const parseRange = (rangeStr) => {
  * @access  Protected
  */
 router.get('/search', auth, async (req, res) => {
-<<<<<<< HEAD
   const { ingredients, diet, health, calories, protein, fat, carbs } = req.query;
 
   // Normalize the search terms: ingredients, diet, health to lowercase and trim spaces
@@ -66,50 +65,11 @@ router.get('/search', auth, async (req, res) => {
     : [];
   const normalizedDiet = diet ? diet.trim().toLowerCase() : null;
   const normalizedHealth = health ? health.trim().toLowerCase() : null;
-=======
-<<<<<<< HEAD
-  const {
-    ingredients,
-    diet,
-    health,
-    calories,
-    protein,
-    fat,
-    carbs,
-    from,
-    to,
-  } = req.query;
-
-  let params = {
-    app_id: process.env.EDAMAM_APP_ID,
-    app_key: process.env.EDAMAM_APP_KEY,
-    q: ingredients || '',
-    from: parseInt(from) || 0,
-    to: parseInt(to) || 100, 
-  };
-
-  if (diet) params.diet = diet;
-  if (health) params.health = health;
-  if (calories) params.calories = calories;
-
-  Object.keys(params).forEach((key) => {
-    if (params[key] === undefined || params[key] === null) {
-      delete params[key];
-    }
-  });
-=======
-  const { ingredients, diet, health, calories, protein, fat, carbs } = req.query;
->>>>>>> taytay
->>>>>>> main
 
   try {
     console.log('Search query received:', req.query);
 
-<<<<<<< HEAD
     // Fetch recipes from Edamam API
-=======
-    // 1. Fetch recipes from Edamam API
->>>>>>> main
     let edamamRecipes = [];
     try {
       const apiResponse = await axios.get('https://api.edamam.com/search', {
@@ -122,10 +82,7 @@ router.get('/search', auth, async (req, res) => {
           calories,
         },
       });
-<<<<<<< HEAD
 
-=======
->>>>>>> main
       console.log('Edamam API response received:', apiResponse.data.hits.length, 'recipes');
 
       edamamRecipes = apiResponse.data.hits.map((hit) => ({
@@ -134,26 +91,17 @@ router.get('/search', auth, async (req, res) => {
         image: hit.recipe.image,
         source: hit.recipe.source,
         url: hit.recipe.url,
-<<<<<<< HEAD
         ingredients: hit.recipe.ingredientLines.map(i => i.toLowerCase()),  // Normalize ingredients from Edamam API
         calories: hit.recipe.calories,
         totalNutrients: hit.recipe.totalNutrients,
         dietLabels: hit.recipe.dietLabels.map(d => d.toLowerCase()), // Normalize dietLabels
         healthLabels: hit.recipe.healthLabels.map(h => h.toLowerCase()), // Normalize healthLabels
-=======
-        ingredients: hit.recipe.ingredientLines,
-        calories: hit.recipe.calories,
-        totalNutrients: hit.recipe.totalNutrients,
-        dietLabels: hit.recipe.dietLabels,
-        healthLabels: hit.recipe.healthLabels,
->>>>>>> main
         isExternal: true,
       }));
     } catch (error) {
       console.error('Error fetching from Edamam API:', error.message);
     }
 
-<<<<<<< HEAD
     // Fetch user-uploaded recipes from MongoDB
     const userRecipesQuery = {};
     if (normalizedIngredients.length > 0) {
@@ -161,38 +109,22 @@ router.get('/search', auth, async (req, res) => {
     }
     if (normalizedDiet) {
       userRecipesQuery.dietLabels = {
-        $in: [new RegExp(`^${normalizedDiet}$`, 'i')], // Case-insensitive regex match
+        $in: [new RegExp(^${normalizedDiet}$, 'i')], // Case-insensitive regex match
       };
     }
     if (normalizedHealth) {
       userRecipesQuery.healthLabels = {
-        $in: [new RegExp(`^${normalizedHealth}$`, 'i')],
+        $in: [new RegExp(^${normalizedHealth}$, 'i')],
       };
     }
 
     const userRecipes = await Recipe.find(userRecipesQuery).lean();
-=======
-    // 2. Fetch user-uploaded recipes from MongoDB
-    const userRecipesQuery = {};
-    if (ingredients) {
-      userRecipesQuery.ingredients = { $all: ingredients.split(',').map((i) => i.trim()) };
-    }
-    if (diet) userRecipesQuery.dietLabels = { $in: [diet] };
-    if (health) userRecipesQuery.healthLabels = { $in: [health] };
-
-    console.log('MongoDB query for user recipes:', userRecipesQuery);
-
-    const userRecipes = await Recipe.find(userRecipesQuery).lean();
-    console.log('User recipes fetched:', userRecipes.length);
-
->>>>>>> main
     const formattedUserRecipes = userRecipes.map((recipe) => ({
       id: recipe._id,
       label: recipe.label,
       image: recipe.image,
       source: recipe.source || 'User Uploaded',
       url: recipe.url || '',
-<<<<<<< HEAD
       ingredients: recipe.ingredients.map(i => i.toLowerCase()), // Normalize ingredients in user recipes
       calories: recipe.calories,
       totalNutrients: recipe.totalNutrients,
@@ -203,20 +135,6 @@ router.get('/search', auth, async (req, res) => {
 
     // Combine results from Edamam and MongoDB
     let combinedRecipes = [...edamamRecipes, ...formattedUserRecipes];
-=======
-      ingredients: recipe.ingredients,
-      calories: recipe.calories,
-      totalNutrients: recipe.totalNutrients,
-      dietLabels: recipe.dietLabels,
-      healthLabels: recipe.healthLabels,
-      isExternal: false,
-      // Exclude directions
-    }));
-
-    // 3. Combine results
-    let combinedRecipes = [...edamamRecipes, ...formattedUserRecipes];
-
->>>>>>> main
     if (protein || fat || carbs) {
       const [minProtein, maxProtein] = parseRange(protein);
       const [minFat, maxFat] = parseRange(fat);
@@ -235,42 +153,15 @@ router.get('/search', auth, async (req, res) => {
       });
     }
 
-<<<<<<< HEAD
     res.json({ success: true, recipes: combinedRecipes.slice(0, 20), total: combinedRecipes.length });
   } catch (error) {
     console.error('Error fetching recipes:', error.message);
     res.status(500).json({ success: false, error: 'Failed to fetch recipes' });
-=======
-<<<<<<< HEAD
-    const total = recipes.length;
-
-    recipes = recipes.slice(0, 20); 
-
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      { $inc: { score: 1 } },
-      { new: true }
-    );
-
-    console.log(`User ${req.user.id} new score: ${updatedUser.score}`);
-
-    res.json({ recipes, total, score: updatedUser.score });
-  } catch (error) {
-    console.error('🛑 Edamam API Error:', error.message);
-    res.status(500).json({ msg: 'Error fetching recipes from Edamam API' });
-=======
-    console.log('Combined recipes:', combinedRecipes.length);
-    res.json({ recipes: combinedRecipes.slice(0, 20), total: combinedRecipes.length });
-  } catch (error) {
-    console.error('Error fetching recipes:', error.message);
-    res.status(500).json({ error: 'Failed to fetch recipes' });
->>>>>>> main
   }
 });
 
 /**
  * @route   POST /api/recipes/upload
-<<<<<<< HEAD
  * @desc    Upload a new recipe with image
  * @access  Protected
  */
@@ -306,7 +197,7 @@ router.post(
       const newRecipe = new Recipe({
         userId: req.user.id,
         label,
-        image: req.file ? `/uploads/${req.file.filename}` : null, // Save image file path
+        image: req.file ? /uploads/${req.file.filename} : null, // Save image file path
         ingredients: JSON.parse(ingredients),
         calories,
         dietLabels: JSON.parse(dietLabels),  // Diet labels should be an array
@@ -319,85 +210,12 @@ router.post(
     } catch (error) {
       console.error('Error uploading recipe:', error.message);
       res.status(500).json({ success: false, error: 'Failed to upload recipe', details: error.message });
-=======
- * @desc    Upload a new recipe
- * @access  Protected
- */
-router.post(
-  '/upload',
-  auth,
-  [
-    body('label').notEmpty().withMessage('Label is required'),
-    body('ingredients').isArray({ min: 1 }).withMessage('Ingredients must be an array'),
-    body('calories').optional().isNumeric().withMessage('Calories must be a number'),
-    body('dietLabels').optional().isArray().withMessage('Diet labels must be an array'),
-    body('healthLabels').optional().isArray().withMessage('Health labels must be an array'),
-    body('image').optional().isURL().withMessage('Image must be a valid URL'),
-    body('directions').optional().isString().withMessage('Directions must be a string'),
-  ],
-  async (req, res) => {
-    console.log('Incoming request body:', req.body);
-    console.log('Authenticated user:', req.user);
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log('Validation Errors:', errors.array());
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const {
-        label,
-        image,
-        source,
-        url,
-        ingredients,
-        calories,
-        dietLabels,
-        healthLabels,
-        totalNutrients,
-        directions, // Include directions
-      } = req.body;
-
-      console.log('Saving the following recipe to the database:', {
-        label,
-        ingredients,
-        calories,
-        userId: req.user.id,
-        directions,
-      });
-
-      const newRecipe = new Recipe({
-        userId: req.user.id,
-        label,
-        image,
-        source,
-        url,
-        ingredients,
-        calories,
-        dietLabels,
-        healthLabels,
-        totalNutrients,
-        directions, // Save directions
-      });
-
-      await newRecipe.save();
-      console.log('Recipe saved successfully:', newRecipe);
-
-      res.status(201).json({ message: 'Recipe uploaded successfully!', recipe: newRecipe });
-    } catch (error) {
-      console.error('Error saving recipe:', error);
-      res.status(500).json({ error: 'Failed to upload recipe', details: error.message });
->>>>>>> main
     }
   }
 );
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> main
 /**
  * @route   GET /api/recipes/:id
  * @desc    Get a specific recipe by ID
@@ -408,7 +226,6 @@ router.get('/:id', auth, async (req, res) => {
     const recipe = await Recipe.findById(req.params.id).lean();
 
     if (!recipe) {
-<<<<<<< HEAD
       return res.status(404).json({ success: false, error: 'Recipe not found' });
     }
 
@@ -416,16 +233,6 @@ router.get('/:id', auth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching recipe:', error.message);
     res.status(500).json({ success: false, error: 'Failed to fetch recipe' });
-=======
-      return res.status(404).json({ error: 'Recipe not found' });
-    }
-
-    res.json(recipe); // Send full recipe, including directions
-  } catch (error) {
-    console.error('Error fetching recipe:', error.message);
-    res.status(500).json({ error: 'Failed to fetch recipe' });
->>>>>>> taytay
->>>>>>> main
   }
 });
 

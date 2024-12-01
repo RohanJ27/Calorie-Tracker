@@ -35,7 +35,7 @@ const SearchForm = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     if (
       (protein && !isValidRange(protein)) ||
       (fat && !isValidRange(fat)) ||
@@ -45,34 +45,37 @@ const SearchForm = () => {
       setLoading(false);
       return;
     }
-
+  
     try {
       const params = {};
-
-      if (ingredients) params.ingredients = ingredients;
-      if (diet) params.diet = diet;
-      if (health) params.health = health;
+  
+      // Normalize ingredients, diet, and health labels to lowercase and trim spaces
+      if (ingredients) {
+        params.ingredients = ingredients.split(',').map(i => i.trim().toLowerCase()).join(',');
+      }
+      if (diet) params.diet = diet.trim().toLowerCase();
+      if (health) params.health = health.trim().toLowerCase();
       if (calories) params.calories = calories;
       if (protein) params.protein = protein;
       if (fat) params.fat = fat;
       if (carbs) params.carbs = carbs;
-
+  
       console.log('Submitting Search with Params:', params);
-
+  
       const token = localStorage.getItem('token');
-
+  
       const res = await axios.get('http://localhost:5000/api/recipes/search', {
         params,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       const { recipes, total } = res.data;
-
+  
       setRecipes(recipes);
       setTotal(total);
-
+  
       navigate('/results');
     } catch (err) {
       console.error('🛑 Recipe Search Error:', err);
@@ -83,6 +86,7 @@ const SearchForm = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div style={styles.container}>

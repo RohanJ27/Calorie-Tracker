@@ -8,11 +8,12 @@ import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext'; 
+import { AuthProvider } from './context/AuthContext';
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
-import AuthSuccess from './components/AuthSuccess'; 
-import UploadRecipe from './components/UploadRecipe'; // New import
+import AuthSuccess from './components/AuthSuccess';
+import UploadRecipe from './components/UploadRecipe';
+import RecipeDetails from './components/RecipeDetails'; // Add RecipeDetails component
 
 function App() {
   return (
@@ -50,9 +51,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                {}
                 <Route path="/auth/success" element={<AuthSuccess />} />
-                {}
                 <Route
                   path="/upload"
                   element={
@@ -61,7 +60,15 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                {/* Redirect all unknown routes to Home */}
+                {/* Add the RecipeDetails route */}
+                <Route
+                  path="/recipes/:id"
+                  element={
+                    <ProtectedRoute>
+                      <RecipeDetails />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="*" element={<Home />} />
               </Routes>
             </div>

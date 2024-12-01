@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
 
 const SearchResults = () => {
@@ -20,6 +20,16 @@ const SearchResults = () => {
       return () => clearTimeout(timeout);
     }
   }, [recipes, total, navigate]);
+
+  const handleViewRecipe = (recipe) => {
+    if (recipe.isExternal) {
+      // Open the external recipe in a new tab
+      window.open(recipe.url, '_blank');
+    } else {
+      // Navigate to the internal recipe details page
+      navigate(`/recipes/${recipe.id}`);
+    }
+  };
 
   if (loading) {
     return <div style={styles.loading}>Loading recipes...</div>;
@@ -43,9 +53,9 @@ const SearchResults = () => {
               <p style={styles.text}>
                 <strong>Health Labels:</strong> {recipe.healthLabels.join(', ') || 'N/A'}
               </p>
-              <Link to={`/recipes/${recipe.id}`} style={styles.link}>
+              <button onClick={() => handleViewRecipe(recipe)} style={styles.link}>
                 View Recipe
-              </Link>
+              </button>
             </div>
           </div>
         ))}
@@ -121,11 +131,13 @@ const styles = {
     backgroundColor: '#033500',
     color: '#fff',
     textDecoration: 'none',
+    border: 'none',
     borderRadius: '8px',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '16px',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
+    cursor: 'pointer',
   },
   loading: {
     textAlign: 'center',

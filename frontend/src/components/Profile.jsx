@@ -13,7 +13,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (user && user._id) {
       fetchFriends();
     }
   }, [user]);

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
+const User = require('../models/User');
 const dotenv = require('dotenv');
 
 dotenv.config();

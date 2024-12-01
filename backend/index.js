@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
 dotenv.config();
 
+
 const app = express();
 
 // CORS configuration
@@ -43,13 +44,18 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB
 mongoose
+<<<<<<< HEAD
   .connect(process.env.MONGO_URI) // Removed deprecated options
+=======
+  .connect(process.env.MONGO_URI)
+>>>>>>> main
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch((err) => {
     console.error('❌ MongoDB connection failed:', err.message);
     process.exit(1);
   });
 
+<<<<<<< HEAD
 const startServer = async () => {
   try {
     const mongoUri = process.env.MONGO_URI;
@@ -80,3 +86,14 @@ const startServer = async () => {
 };
 
 startServer();
+<<<<<<< HEAD
+=======
+=======
+
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+>>>>>>> taytay
+>>>>>>> main

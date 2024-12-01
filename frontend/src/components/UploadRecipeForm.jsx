@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
+=======
+import { useNavigate } from 'react-router-dom'; 
+>>>>>>> main
 
 const UploadRecipeForm = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +12,7 @@ const UploadRecipeForm = () => {
     calories: '',
     dietLabels: '',
     healthLabels: '',
+<<<<<<< HEAD
     image: null, // Store file object
     directions: '',
   });
@@ -21,10 +26,20 @@ const UploadRecipeForm = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+=======
+    image: '',
+    directions: '', // Add directions to state
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+>>>>>>> main
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
 
     const form = new FormData();
     form.append('label', formData.label);
@@ -96,12 +111,40 @@ const UploadRecipeForm = () => {
         } else {
           alert(`Error: ${errorData.error || 'Failed to upload recipe'}`);
         }
+=======
+  
+    // Format the data before sending it to the backend
+    const formattedData = {
+      ...formData,
+      ingredients: formData.ingredients.split(',').map((item) => item.trim()),
+      dietLabels: formData.dietLabels.split(',').map((item) => item.trim()),
+      healthLabels: formData.healthLabels.split(',').map((item) => item.trim()),
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/recipes/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is present
+        },
+        body: JSON.stringify(formattedData),
+      });
+  
+      if (response.ok) {
+        alert('Recipe uploaded successfully!');
+        navigate('/profile'); // Redirect to profile after successful upload
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || 'Failed to upload recipe'}`);
+>>>>>>> main
       }
     } catch (error) {
       console.error('Error uploading recipe:', error);
       alert('An error occurred while uploading the recipe.');
     }
   };
+<<<<<<< HEAD
 
   return (
     <form
@@ -109,6 +152,13 @@ const UploadRecipeForm = () => {
       encType="multipart/form-data"
       style={{ maxWidth: '500px', margin: '0 auto' }}
     >
+=======
+  
+  
+
+  return (
+    <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
+>>>>>>> main
       <h1>Upload Recipe</h1>
       <input
         type="text"
@@ -147,10 +197,18 @@ const UploadRecipeForm = () => {
         onChange={handleChange}
       />
       <input
+<<<<<<< HEAD
         type="file"
         name="image"
         onChange={handleChange}
         required
+=======
+        type="text"
+        name="image"
+        placeholder="Image URL"
+        value={formData.image}
+        onChange={handleChange}
+>>>>>>> main
       />
       <textarea
         name="directions"

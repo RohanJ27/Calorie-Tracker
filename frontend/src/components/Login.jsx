@@ -41,9 +41,16 @@ const Login = () => {
 
       localStorage.setItem('token', res.data.token);
       setAuth(true);
-      setUser(res.data.user);
 
-    
+      const userRes = await axios.get('http://localhost:5000/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${res.data.token}`,
+        },
+      });
+
+      const userData = userRes.data;
+      setUser(userData);
+
       navigate('/profile');
     } catch (err) {
       console.error('Login error:', err);

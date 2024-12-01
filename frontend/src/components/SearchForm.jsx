@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import RecipeContext from '../context/RecipeContext';
+import BounceLoader from "react-spinners/BounceLoader";
+
 
 const SearchForm = () => {
   const { auth } = useContext(AuthContext);
@@ -70,10 +72,16 @@ const SearchForm = () => {
 
       const { recipes, total } = res.data;
 
-      setRecipes(recipes);
-      setTotal(total);
-
-      navigate('/results');
+      // Simulate a delay using a timeout
+      setTimeout(() => {
+        setRecipes(recipes);
+        setTotal(total);
+        setLoading(false);
+        navigate('/results');
+        
+      }, 150); 
+       
+      
     } catch (err) {
       console.error('🛑 Recipe Search Error:', err);
       setError(
@@ -86,6 +94,14 @@ const SearchForm = () => {
 
   return (
     <div style={styles.container}>
+      {/* Fullscreen Spinner */}
+      {loading && (
+        <div style={styles.spinnerOverlay}>
+          <BounceLoader color="#033500" size={200} />
+        </div>
+      )}
+
+      {/* Search Form */}
       <h2 style={styles.title}>Find Your Perfect Recipe</h2>
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>
@@ -140,7 +156,7 @@ const SearchForm = () => {
         </div>
 
         <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? 'Searching...' : 'Search Recipes'}
+          {loading ? 'Loading...' : 'Search Recipes'}
         </button>
       </form>
     </div>
@@ -219,6 +235,7 @@ const styles = {
     backgroundColor: '#fff',
   },
   button: {
+    position: 'relative',
     padding: '14px',
     backgroundColor: '#033500',
     color: '#fff',
@@ -231,6 +248,19 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  spinnerOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+     
   },
 };
 

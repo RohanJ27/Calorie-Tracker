@@ -9,9 +9,10 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+
 router.get('/me', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password -googleId');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -21,6 +22,7 @@ router.get('/me', auth, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 router.post(
   '/signup',
@@ -33,7 +35,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('Signup Validation Failed:', errors.array());
-      return res.status(400).json({ message: errors.array()[0].msg }); // Send the first error message
+      return res.status(400).json({ message: errors.array()[0].msg }); 
     }
 
     const { username, email, password } = req.body;
@@ -64,20 +66,21 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          email: user.email,
         },
       };
 
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, 
+        { expiresIn: '1h' },
         (err, token) => {
           if (err) {
             console.error('JWT Sign Error:', err);
             throw err;
           }
           console.log('Signup Successful: Token generated');
-          res.json({ token });
+          res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
         }
       );
     } catch (err) {
@@ -87,13 +90,19 @@ router.post(
   }
 );
 
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(400).json({ message: 'Invalid Credentials' });
+    }
+
+    if (user.googleId) {
+      return res.status(400).json({ message: 'Please use Google Sign-In' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -111,10 +120,10 @@ router.post('/login', async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }, 
+      { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
       }
     );
   } catch (err) {
@@ -123,9 +132,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
 router.get('/profile', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password -googleId');
     res.json(user);
   } catch (err) {
     console.error('Profile Fetch Error:', err.message);

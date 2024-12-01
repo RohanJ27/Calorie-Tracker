@@ -9,31 +9,34 @@ import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthProvider from './context/AuthProvider';
+import { AuthProvider } from './context/AuthContext'; 
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
+
+import AuthSuccess from './components/AuthSuccess'; 
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <RecipeProvider>
-          <ErrorBoundary>
-            <Navbar />
-            <div style={{ paddingTop: '60px' }}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
+     
+        <AuthProvider>
+          <RecipeProvider>
+            <ErrorBoundary>
+              <Navbar />
+              <div style={{ paddingTop: '60px' }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
                   path="/profile/:friendId"
                   element={
                     <ProtectedRoute>
@@ -42,28 +45,31 @@ function App() {
                   }
                 />
                 <Route
-                  path="/search"
-                  element={
-                    <ProtectedRoute>
-                      <SearchForm />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/results"
-                  element={
-                    <ProtectedRoute>
-                      <SearchResults />
-                    </ProtectedRoute>
-                  }
-                />
-                {/* Redirect all unknown routes to Home */}
-                <Route path="*" element={<Home />} />
-              </Routes>
-            </div>
-          </ErrorBoundary>
-        </RecipeProvider>
-      </AuthProvider>
+                    path="/search"
+                    element={
+                      <ProtectedRoute>
+                        <SearchForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/results"
+                    element={
+                      <ProtectedRoute>
+                        <SearchResults />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {}
+                <Route path="/auth/success" element={<AuthSuccess />} />
+                {}
+                  <Route path="*" element={<Home />} />
+                </Routes>
+              </div>
+            </ErrorBoundary>
+          </RecipeProvider>
+        </AuthProvider>
+      
     </Router>
   );
 }

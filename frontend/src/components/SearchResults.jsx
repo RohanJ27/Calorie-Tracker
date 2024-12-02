@@ -54,7 +54,14 @@ const SearchResults = () => {
               style={styles.image}
             />
             <div style={styles.content}>
-              <h3 style={styles.recipeTitle}>{recipe.label || 'Untitled Recipe'}</h3>
+              <h3 style={styles.recipeTitle}>
+                {recipe.label
+                  ? recipe.label
+                      .split(' ')
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ')
+                  : 'Untitled Recipe'}
+              </h3>
               <p style={styles.text}>
                 <strong>Source:</strong> {recipe.source || 'Unknown'}
               </p>

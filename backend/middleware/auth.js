@@ -5,7 +5,7 @@ dotenv.config();
 
 module.exports = function (req, res, next) {
   const authHeader = req.header('Authorization');
-  console.log('Authorization Header:', authHeader); 
+  console.log('Authorization Header:', authHeader); // Log the raw header
   const token = authHeader?.split(' ')[1]; 
 
   if (!token) {
@@ -16,7 +16,7 @@ module.exports = function (req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
-    console.log('Decoded Token:', decoded); 
+    console.log('Decoded Token:', decoded); // Log the decoded token
     console.log('User from token:', req.user);
     next();
   } catch (err) {

@@ -98,6 +98,7 @@ const UploadRecipeForm = () => {
       <div style={styles.card}>
         <h1 style={styles.title}>Upload Recipe</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data" style={styles.form}>
+<<<<<<< HEAD
           <div style={styles.formGroup}>
             <label htmlFor="label" style={styles.label}>
               Recipe Name
@@ -130,6 +131,25 @@ const UploadRecipeForm = () => {
           </div>
 
           <div style={styles.formGroup}>
+=======
+        <div style={styles.formGroup}>
+          <label htmlFor="label" style={styles.label}>
+            Recipe Name
+          </label>
+          <input
+            type="text"
+            id="label"
+            name="label"
+            placeholder="Enter the recipe name"
+            value={formData.label}
+            onChange={handleChange}
+            style={styles.input} // Change this to use the standard input style
+            required
+          />
+        </div>
+
+          <div style={styles.formGroup}>
+>>>>>>> origin/main
             <label htmlFor="calories" style={styles.label}>
               Calories
             </label>
@@ -144,7 +164,10 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
           <div style={styles.formGroup}>
             <label htmlFor="dietLabels" style={styles.label}>
               Diet Labels
@@ -160,7 +183,10 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
           <div style={styles.formGroup}>
             <label htmlFor="healthLabels" style={styles.label}>
               Health Labels
@@ -176,7 +202,10 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
           <div style={styles.formGroup}>
             <label htmlFor="image" style={styles.label}>
               Upload Image
@@ -190,7 +219,10 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
           <div style={styles.formGroup}>
             <label htmlFor="directions" style={styles.label}>
               Directions
@@ -205,7 +237,10 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
           <button type="submit" style={styles.button}>
             Upload Recipe
           </button>
@@ -330,4 +365,8 @@ const styles = {
   },
 };
 
+<<<<<<< HEAD
 export default UploadRecipeForm;
+=======
+export default UploadRecipeForm;
+>>>>>>> origin/main

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './uploadRecipeForm.css'; 
 
 const UploadRecipeForm = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +12,7 @@ const UploadRecipeForm = () => {
     directions: '',
   });
 
-  const [message, setMessage] = useState(null); 
+  const [message, setMessage] = useState(null); // For success or error messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -95,21 +94,12 @@ const UploadRecipeForm = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="upload-recipe-container">
-      <div className="upload-recipe-card">
-        <h1 className="upload-recipe-title">Upload Recipe</h1>
-        <form onSubmit={handleSubmit} encType="multipart/form-data" className="upload-recipe-form">
-          <div className="upload-recipe-form-group">
-            <label htmlFor="label" className="upload-recipe-label">
-=======
     <div style={styles.container}>
       <div style={styles.card}>
         <h1 style={styles.title}>Upload Recipe</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data" style={styles.form}>
           <div style={styles.formGroup}>
             <label htmlFor="label" style={styles.label}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Recipe Name
             </label>
             <input
@@ -119,9 +109,6 @@ const UploadRecipeForm = () => {
               placeholder="Enter the recipe name"
               value={formData.label}
               onChange={handleChange}
-<<<<<<< HEAD
-              className="upload-recipe-input"
-=======
               style={styles.input}
               required
             />
@@ -138,13 +125,12 @@ const UploadRecipeForm = () => {
               value={formData.ingredients}
               onChange={handleChange}
               style={styles.textarea}
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               required
             />
           </div>
 
-          <div className="upload-recipe-form-group">
-            <label htmlFor="calories" className="upload-recipe-label">
+          <div style={styles.formGroup}>
+            <label htmlFor="calories" style={styles.label}>
               Calories
             </label>
             <input
@@ -154,18 +140,13 @@ const UploadRecipeForm = () => {
               placeholder="Enter calories"
               value={formData.calories}
               onChange={handleChange}
-              className="upload-recipe-input"
+              style={styles.input}
               required
             />
           </div>
-<<<<<<< HEAD
-          <div className="upload-recipe-form-group">
-            <label htmlFor="dietLabels" className="upload-recipe-label">
-=======
 
           <div style={styles.formGroup}>
             <label htmlFor="dietLabels" style={styles.label}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Diet Labels
             </label>
             <input
@@ -175,18 +156,13 @@ const UploadRecipeForm = () => {
               placeholder="Enter diet labels, comma-separated"
               value={formData.dietLabels}
               onChange={handleChange}
-              className="upload-recipe-input"
+              style={styles.input}
               required
             />
           </div>
-<<<<<<< HEAD
-          <div className="upload-recipe-form-group">
-            <label htmlFor="healthLabels" className="upload-recipe-label">
-=======
 
           <div style={styles.formGroup}>
             <label htmlFor="healthLabels" style={styles.label}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Health Labels
             </label>
             <input
@@ -196,18 +172,13 @@ const UploadRecipeForm = () => {
               placeholder="Enter health labels, comma-separated"
               value={formData.healthLabels}
               onChange={handleChange}
-              className="upload-recipe-input"
+              style={styles.input}
               required
             />
           </div>
-<<<<<<< HEAD
-          <div className="upload-recipe-form-group">
-            <label htmlFor="image" className="upload-recipe-label">
-=======
 
           <div style={styles.formGroup}>
             <label htmlFor="image" style={styles.label}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Upload Image
             </label>
             <input
@@ -215,18 +186,13 @@ const UploadRecipeForm = () => {
               id="image"
               name="image"
               onChange={handleChange}
-              className="upload-recipe-input"
+              style={styles.input}
               required
             />
           </div>
-<<<<<<< HEAD
-          <div className="upload-recipe-form-group">
-            <label htmlFor="directions" className="upload-recipe-label">
-=======
 
           <div style={styles.formGroup}>
             <label htmlFor="directions" style={styles.label}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Directions
             </label>
             <textarea
@@ -235,33 +201,133 @@ const UploadRecipeForm = () => {
               placeholder="Enter the directions"
               value={formData.directions}
               onChange={handleChange}
-              className="upload-recipe-textarea-darker"
+              style={styles.textareaDarker}
               required
             />
           </div>
-<<<<<<< HEAD
-          <button type="submit" className="upload-recipe-button">
-=======
 
           <button type="submit" style={styles.button}>
->>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
             Upload Recipe
           </button>
         </form>
       </div>
       {message && (
         <div
-          className={`upload-recipe-message ${
-            message.type === 'success'
-              ? 'upload-recipe-success-message'
-              : 'upload-recipe-error-message'
-          }`}
+          style={{
+            ...styles.message,
+            ...(message.type === 'success' ? styles.successMessage : styles.errorMessage),
+          }}
         >
           {message.text}
         </div>
       )}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100vw',
+    padding: '20px',
+    boxSizing: 'border-box',
+    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
+    color: 'rgba(255, 255, 255, 0.87)',
+  },
+  card: {
+    width: '100%',
+    maxWidth: '600px',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '8px',
+    padding: '30px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+  },
+  title: {
+    fontSize: '32px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: '20px',
+    color: '#2c3e50',
+  },
+  message: {
+    position: 'fixed',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    padding: '16px 24px',
+    borderRadius: '10px',
+    fontSize: '20px', // Larger font size
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#fff',
+    zIndex: 1000,
+  },
+  successMessage: {
+    backgroundColor: '#033500',
+  },
+  errorMessage: {
+    backgroundColor: '#d9534f',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+  },
+  formGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  label: {
+    marginBottom: '8px',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    color: '#2c3e50',
+  },
+  input: {
+    padding: '12px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '14px',
+    backgroundColor: '#fff', // White background
+    color: '#2c3e50',        // Dark text
+    fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
+  },  
+  textarea: {
+    padding: '12px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '14px',
+    backgroundColor: '#fff',
+    color: '#2c3e50',
+    minHeight: '80px',
+  },
+  textareaDarker: {
+    padding: '12px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '14px',
+    backgroundColor: '#f7f7f7',
+    color: '#2c3e50',
+    minHeight: '120px',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#033500',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
 };
 
 export default UploadRecipeForm;

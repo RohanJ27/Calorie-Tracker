@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import './signup.css'; 
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ const Signup = () => {
     e.preventDefault();
     setError(null);
 
-    
     if (password !== password2) {
       setError('Passwords do not match');
       return;
@@ -49,12 +49,10 @@ const Signup = () => {
 
       console.log('Signup successful:', res.data);
 
-     
       localStorage.setItem('token', res.data.token);
       setAuth(true);
       setUser(res.data.user);
 
-      
       navigate('/profile');
     } catch (err) {
       console.error('Signup error:', err);
@@ -68,20 +66,19 @@ const Signup = () => {
     }
   };
 
- 
   const handleGoogleSignUp = () => {
     window.location.href = 'http://localhost:5000/api/auth/google';
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h2 style={styles.title}>Create an Account</h2>
+    <div className="signup-container">
+      <div className="signup-header">
+        <h2 className="signup-title">Create an Account</h2>
       </div>
-      {error && <p style={styles.error}>{error}</p>}
-      <form onSubmit={onSubmit} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label htmlFor="username" style={styles.label}>
+      {error && <p className="signup-error">{error}</p>}
+      <form onSubmit={onSubmit} className="signup-form">
+        <div className="signup-form-group">
+          <label htmlFor="username" className="signup-label">
             Username:
           </label>
           <input
@@ -91,11 +88,11 @@ const Signup = () => {
             value={username}
             onChange={onChange}
             required
-            style={styles.input}
+            className="signup-input"
           />
         </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
+        <div className="signup-form-group">
+          <label htmlFor="email" className="signup-label">
             Email:
           </label>
           <input
@@ -105,11 +102,11 @@ const Signup = () => {
             value={email}
             onChange={onChange}
             required
-            style={styles.input}
+            className="signup-input"
           />
         </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.label}>
+        <div className="signup-form-group">
+          <label htmlFor="password" className="signup-label">
             Password:
           </label>
           <input
@@ -119,11 +116,11 @@ const Signup = () => {
             value={password}
             onChange={onChange}
             required
-            style={styles.input}
+            className="signup-input"
           />
         </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="password2" style={styles.label}>
+        <div className="signup-form-group">
+          <label htmlFor="password2" className="signup-label">
             Confirm Password:
           </label>
           <input
@@ -133,124 +130,21 @@ const Signup = () => {
             value={password2}
             onChange={onChange}
             required
-            style={styles.input}
+            className="signup-input"
           />
         </div>
-        <button type="submit" style={styles.button} disabled={loading}>
+        <button type="submit" className="signup-button" disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
         </button>
       </form>
-      <div style={styles.googleSignInContainer}>
-        <p style={styles.orText}>Or</p>
-        <button style={styles.googleButton} onClick={handleGoogleSignUp}>
+      <div className="signup-google-signin-container">
+        <p className="signup-or-text">Or</p>
+        <button className="signup-google-button" onClick={handleGoogleSignUp}>
           Sign up with Google
         </button>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100vw',
-    height: '100vh',
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'Funnel Sans, sans-serif',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    backgroundImage:
-      'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  header: {
-    marginBottom: '20px',
-    textAlign: 'center',
-  },
-  title: {
-    fontSize: '40px',
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: '10px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '15px',
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-    padding: '10px',
-    borderRadius: '5px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: '400px',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    padding: '30px',
-    borderRadius: '8px',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-  },
-  formGroup: {
-    marginBottom: '20px',
-  },
-  label: {
-    marginBottom: '8px',
-    fontWeight: 'bold',
-    display: 'block',
-    color: '#2c3e50',
-    fontSize: '16px',
-  },
-  input: {
-    padding: '12px',
-    width: '100%',
-    boxSizing: 'border-box',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '14px',
-    backgroundColor: '#033500',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  googleSignInContainer: {
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-  orText: {
-    marginBottom: '10px',
-    color: '#2c3e50',
-    fontWeight: 'bold',
-    fontSize: '18px',
-  },
-  googleButton: {
-    padding: '14px',
-    backgroundColor: '#db4437',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-  },
 };
 
 export default Signup;

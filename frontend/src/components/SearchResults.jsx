@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
 
 const SearchResults = () => {
@@ -23,9 +23,9 @@ const SearchResults = () => {
 
   const handleViewRecipe = (recipe) => {
     if (recipe.isExternal) {
-      window.open(recipe.url, '_blank');
+      window.open(recipe.url, '_blank'); // Open Edamam recipe in a new tab
     } else {
-      navigate(`/recipes/${recipe.id}`);
+      navigate(`/recipes/${recipe.id}`); // Navigate to user-uploaded recipe details
     }
   };
 
@@ -94,9 +94,12 @@ const SearchResults = () => {
                       .join(', ')
                   : 'N/A'}
               </p>
-              <Link to={`/recipes/${recipe.id}`} style={styles.link}>
+              <button
+                onClick={() => handleViewRecipe(recipe)}
+                style={styles.link} // Keep the button styled as a link
+              >
                 View Recipe
-              </Link>
+              </button>
             </div>
           </div>
         ))}

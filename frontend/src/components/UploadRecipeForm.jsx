@@ -49,10 +49,19 @@ const UploadRecipeForm = () => {
 
     const form = new FormData();
     form.append('label', formData.label);
-    form.append('ingredients', JSON.stringify(formData.ingredients.split(',').map((item) => item.trim())));
+    form.append(
+      'ingredients',
+      JSON.stringify(formData.ingredients.split(',').map((item) => item.trim()))
+    );
     form.append('calories', formData.calories);
-    form.append('dietLabels', JSON.stringify(formData.dietLabels.split(',').map((item) => item.trim())));
-    form.append('healthLabels', JSON.stringify(formData.healthLabels.split(',').map((item) => item.trim())));
+    form.append(
+      'dietLabels',
+      JSON.stringify(formData.dietLabels.split(',').map((item) => item.trim()))
+    );
+    form.append(
+      'healthLabels',
+      JSON.stringify(formData.healthLabels.split(',').map((item) => item.trim()))
+    );
     form.append('directions', formData.directions);
 
     if (formData.image) {
@@ -88,47 +97,22 @@ const UploadRecipeForm = () => {
     <div style={styles.container}>
       <div style={styles.card}>
         <h1 style={styles.title}>Upload Recipe</h1>
-        {message && (
-          <div
-            style={{
-              ...styles.message,
-              ...(message.type === 'success' ? styles.successMessage : styles.errorMessage),
-            }}
-          >
-            {message.text}
-          </div>
-        )}
         <form onSubmit={handleSubmit} encType="multipart/form-data" style={styles.form}>
-          <div style={styles.formGroup}>
-            <label htmlFor="label" style={styles.label}>
-              Recipe Name
-            </label>
-            <input
-              type="text"
-              id="label"
-              name="label"
-              placeholder="Enter the recipe name"
-              value={formData.label}
-              onChange={handleChange}
-              style={styles.inputGray}
-              required
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label htmlFor="ingredients" style={styles.label}>
-              Ingredients
-            </label>
-            <textarea
-              id="ingredients"
-              name="ingredients"
-              placeholder="Enter ingredients, comma-separated"
-              value={formData.ingredients}
-              onChange={handleChange}
-              style={styles.textarea}
-              required
-            />
-          </div>
+        <div style={styles.formGroup}>
+          <label htmlFor="label" style={styles.label}>
+            Recipe Name
+          </label>
+          <input
+            type="text"
+            id="label"
+            name="label"
+            placeholder="Enter the recipe name"
+            value={formData.label}
+            onChange={handleChange}
+            style={styles.input} // Change this to use the standard input style
+            required
+          />
+        </div>
 
           <div style={styles.formGroup}>
             <label htmlFor="calories" style={styles.label}>
@@ -145,7 +129,6 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
-
           <div style={styles.formGroup}>
             <label htmlFor="dietLabels" style={styles.label}>
               Diet Labels
@@ -161,7 +144,6 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
-
           <div style={styles.formGroup}>
             <label htmlFor="healthLabels" style={styles.label}>
               Health Labels
@@ -177,7 +159,6 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
-
           <div style={styles.formGroup}>
             <label htmlFor="image" style={styles.label}>
               Upload Image
@@ -188,9 +169,9 @@ const UploadRecipeForm = () => {
               name="image"
               onChange={handleChange}
               style={styles.input}
+              required
             />
           </div>
-
           <div style={styles.formGroup}>
             <label htmlFor="directions" style={styles.label}>
               Directions
@@ -205,12 +186,21 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
-
           <button type="submit" style={styles.button}>
             Upload Recipe
           </button>
         </form>
       </div>
+      {message && (
+        <div
+          style={{
+            ...styles.message,
+            ...(message.type === 'success' ? styles.successMessage : styles.errorMessage),
+          }}
+        >
+          {message.text}
+        </div>
+      )}
     </div>
   );
 };
@@ -246,19 +236,23 @@ const styles = {
     color: '#2c3e50',
   },
   message: {
-    padding: '12px 20px',
-    margin: '20px 0',
-    borderRadius: '8px',
-    fontSize: '16px',
+    position: 'fixed',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    padding: '16px 24px',
+    borderRadius: '10px',
+    fontSize: '20px', // Larger font size
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#fff',
+    zIndex: 1000,
   },
   successMessage: {
-    backgroundColor: '#033500', // Green for success
+    backgroundColor: '#033500',
   },
   errorMessage: {
-    backgroundColor: '#d9534f', // Red for error
+    backgroundColor: '#d9534f',
   },
   form: {
     display: 'flex',
@@ -280,25 +274,10 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '14px',
-    backgroundColor: '#fff', // Enforce white background
-    color: '#2c3e50', // Enforce black text
+    backgroundColor: '#fff', // White background
+    color: '#2c3e50',        // Dark text
     fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
-    appearance: 'none', // Disable browser autofill styles
-    boxShadow: 'none', // Remove autofill yellow highlight
-  },
-  
-  inputGray: {
-    padding: '12px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    fontSize: '14px',
-    backgroundColor: '#f7f7f7', // Light gray background
-    color: '#2c3e50', // Enforce black text
-    fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
-    appearance: 'none', // Disable browser autofill styles
-    boxShadow: 'none', // Remove autofill yellow highlight
-  },
-  
+  },  
   textarea: {
     padding: '12px',
     borderRadius: '5px',

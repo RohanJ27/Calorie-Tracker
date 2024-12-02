@@ -214,6 +214,7 @@ router.post(
         ingredients: parsedIngredients.map((i) => i.toLowerCase()),
         dietLabels: parsedDietLabels.map((d) => d.toLowerCase()),
         healthLabels: parsedHealthLabels.map((h) => h.toLowerCase()),
+        calories: parseFloat(calories), // Save the calories as a number
         directions,
       });
 

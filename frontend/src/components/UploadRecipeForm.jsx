@@ -98,21 +98,36 @@ const UploadRecipeForm = () => {
       <div style={styles.card}>
         <h1 style={styles.title}>Upload Recipe</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data" style={styles.form}>
-        <div style={styles.formGroup}>
-          <label htmlFor="label" style={styles.label}>
-            Recipe Name
-          </label>
-          <input
-            type="text"
-            id="label"
-            name="label"
-            placeholder="Enter the recipe name"
-            value={formData.label}
-            onChange={handleChange}
-            style={styles.input} // Change this to use the standard input style
-            required
-          />
-        </div>
+          <div style={styles.formGroup}>
+            <label htmlFor="label" style={styles.label}>
+              Recipe Name
+            </label>
+            <input
+              type="text"
+              id="label"
+              name="label"
+              placeholder="Enter the recipe name"
+              value={formData.label}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+
+          <div style={styles.formGroup}>
+            <label htmlFor="ingredients" style={styles.label}>
+              Ingredients
+            </label>
+            <textarea
+              id="ingredients"
+              name="ingredients"
+              placeholder="Enter ingredients, comma-separated"
+              value={formData.ingredients}
+              onChange={handleChange}
+              style={styles.textarea}
+              required
+            />
+          </div>
 
           <div style={styles.formGroup}>
             <label htmlFor="calories" style={styles.label}>
@@ -129,6 +144,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="dietLabels" style={styles.label}>
               Diet Labels
@@ -144,6 +160,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="healthLabels" style={styles.label}>
               Health Labels
@@ -159,6 +176,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="image" style={styles.label}>
               Upload Image
@@ -172,6 +190,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="directions" style={styles.label}>
               Directions
@@ -186,6 +205,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <button type="submit" style={styles.button}>
             Upload Recipe
           </button>

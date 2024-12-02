@@ -1,5 +1,3 @@
-// frontend/src/components/SearchResults.jsx
-
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
@@ -23,9 +21,25 @@ const SearchResults = () => {
     }
   }, [recipes, total, navigate]);
 
+  const handleViewRecipe = (recipe) => {
+    if (recipe.isExternal) {
+      window.open(recipe.url, '_blank'); // Open Edamam recipe in a new tab
+    } else {
+      navigate(`/recipes/${recipe.id}`); // Navigate to user-uploaded recipe details
+    }
+  };
+
   if (loading) {
 
     return <div style={styles.loading}>Loading recipes...</div>;
+  }
+
+  if (!loading && recipes.length === 0) {
+    return (
+      <div style={styles.loading}>
+        <p>No recipes found. Try adjusting your search criteria.</p>
+      </div>
+    );
   }
 
   return (
@@ -35,25 +49,58 @@ const SearchResults = () => {
       <div style={styles.recipesContainer}>
         {recipes.map((recipe, index) => (
           <div key={index} style={styles.card}>
-            <img src={recipe.image} alt={recipe.label} style={styles.image} />
+            <img
+              src={recipe.isExternal ? recipe.image : `http://localhost:5000${recipe.image}`}
+              alt={recipe.label}
+              style={styles.image}
+            />
             <div style={styles.content}>
-              <h3 style={styles.recipeTitle}>{recipe.label}</h3>
-              <p style={styles.text}><strong>Source:</strong> {recipe.source}</p>
-              <p style={styles.text}><strong>Calories:</strong> {Math.round(recipe.calories)}</p>
+              <h3 style={styles.recipeTitle}>
+                {recipe.label
+                  ? recipe.label
+                      .split(' ')
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ')
+                  : 'Untitled Recipe'}
+              </h3>
               <p style={styles.text}>
-                <strong>Diet Labels:</strong> {recipe.dietLabels.join(', ') || 'N/A'}
+                <strong>Source:</strong> {recipe.source || 'Unknown'}
               </p>
               <p style={styles.text}>
-                <strong>Health Labels:</strong> {recipe.healthLabels.join(', ') || 'N/A'}
+                <strong>Calories:</strong> {recipe.calories ? Math.round(recipe.calories) : 'N/A'}
               </p>
-              <a
-                href={recipe.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.link}
+              <p style={styles.text}>
+                <strong>Diet Labels:</strong>{' '}
+                {recipe.dietLabels?.length > 0
+                  ? recipe.dietLabels
+                      .map((label) =>
+                        label
+                          .split(' ')
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(' ')
+                      )
+                      .join(', ')
+                  : 'N/A'}
+              </p>
+              <p style={styles.text}>
+                <strong>Health Labels:</strong>{' '}
+                {recipe.healthLabels?.length > 0
+                  ? recipe.healthLabels
+                      .map((label) =>
+                        label
+                          .split(' ')
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(' ')
+                      )
+                      .join(', ')
+                  : 'N/A'}
+              </p>
+              <button
+                onClick={() => handleViewRecipe(recipe)}
+                style={styles.link} // Keep the button styled as a link
               >
                 View Recipe
-              </a>
+              </button>
             </div>
           </div>
         ))}
@@ -130,11 +177,13 @@ const styles = {
     backgroundColor: '#033500',
     color: '#fff',
     textDecoration: 'none',
+    border: 'none',
     borderRadius: '8px',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '16px',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
+    cursor: 'pointer',
   },
   loading: {
     textAlign: 'center',

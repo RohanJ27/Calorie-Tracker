@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import './login.css'; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -69,14 +70,14 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h2 style={styles.title}>Login to RecipeFit</h2>
+    <div className="login-container">
+      <div className="login-header">
+        <h2 className="login-title">Login to RecipeFit</h2>
       </div>
-      {error && <p style={styles.error}>{error}</p>}
-      <form onSubmit={onSubmit} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
+      {error && <p className="login-error">{error}</p>}
+      <form onSubmit={onSubmit} className="login-form">
+        <div className="login-form-group">
+          <label htmlFor="email" className="login-label">
             Email:
           </label>
           <input
@@ -86,11 +87,11 @@ const Login = () => {
             value={email}
             onChange={onChange}
             required
-            style={styles.input}
+            className="login-input"
           />
         </div>
-        <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.label}>
+        <div className="login-form-group">
+          <label htmlFor="password" className="login-label">
             Password:
           </label>
           <input
@@ -100,120 +101,21 @@ const Login = () => {
             value={password}
             onChange={onChange}
             required
-            style={styles.input}
+            className="login-input"
           />
         </div>
-        <button type="submit" style={styles.button} disabled={loading}>
+        <button type="submit" className="login-button" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      <div style={styles.googleSignInContainer}>
-        <p style={styles.orText}>Or</p>
-        <button style={styles.googleButton} onClick={handleGoogleSignIn}>
+      <div className="login-google-signin-container">
+        <p className="login-or-text">Or</p>
+        <button className="login-google-button" onClick={handleGoogleSignIn}>
           Sign in with Google
         </button>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100vw',
-    height: '100vh',
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'Funnel Sans',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    backgroundImage:
-      'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  header: {
-    marginBottom: '20px',
-    textAlign: 'center',
-  },
-  title: {
-    fontSize: '40px',
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: '10px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '15px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: '400px',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-  },
-  formGroup: {
-    marginBottom: '15px',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold',
-    display: 'block',
-    color: '#2c3e50',
-  },
-  input: {
-    padding: '10px',
-    width: '100%',
-    boxSizing: 'border-box',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '12px',
-    backgroundColor: '#033500',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  googleSignInContainer: {
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-  orText: {
-    marginBottom: '10px',
-    color: '#2c3e50',
-    fontWeight: 'bold',
-    fontSize: '18px',
-  },
-  googleButton: {
-    padding: '14px',
-    backgroundColor: '#db4437',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-  },
 };
 
 export default Login;

@@ -95,12 +95,21 @@ const UploadRecipeForm = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="upload-recipe-container">
       <div className="upload-recipe-card">
         <h1 className="upload-recipe-title">Upload Recipe</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="upload-recipe-form">
           <div className="upload-recipe-form-group">
             <label htmlFor="label" className="upload-recipe-label">
+=======
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>Upload Recipe</h1>
+        <form onSubmit={handleSubmit} encType="multipart/form-data" style={styles.form}>
+          <div style={styles.formGroup}>
+            <label htmlFor="label" style={styles.label}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Recipe Name
             </label>
             <input
@@ -110,7 +119,26 @@ const UploadRecipeForm = () => {
               placeholder="Enter the recipe name"
               value={formData.label}
               onChange={handleChange}
+<<<<<<< HEAD
               className="upload-recipe-input"
+=======
+              style={styles.input}
+              required
+            />
+          </div>
+
+          <div style={styles.formGroup}>
+            <label htmlFor="ingredients" style={styles.label}>
+              Ingredients
+            </label>
+            <textarea
+              id="ingredients"
+              name="ingredients"
+              placeholder="Enter ingredients, comma-separated"
+              value={formData.ingredients}
+              onChange={handleChange}
+              style={styles.textarea}
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               required
             />
           </div>
@@ -130,8 +158,14 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
           <div className="upload-recipe-form-group">
             <label htmlFor="dietLabels" className="upload-recipe-label">
+=======
+
+          <div style={styles.formGroup}>
+            <label htmlFor="dietLabels" style={styles.label}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Diet Labels
             </label>
             <input
@@ -145,8 +179,14 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
           <div className="upload-recipe-form-group">
             <label htmlFor="healthLabels" className="upload-recipe-label">
+=======
+
+          <div style={styles.formGroup}>
+            <label htmlFor="healthLabels" style={styles.label}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Health Labels
             </label>
             <input
@@ -160,8 +200,14 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
           <div className="upload-recipe-form-group">
             <label htmlFor="image" className="upload-recipe-label">
+=======
+
+          <div style={styles.formGroup}>
+            <label htmlFor="image" style={styles.label}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Upload Image
             </label>
             <input
@@ -173,8 +219,14 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
           <div className="upload-recipe-form-group">
             <label htmlFor="directions" className="upload-recipe-label">
+=======
+
+          <div style={styles.formGroup}>
+            <label htmlFor="directions" style={styles.label}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
               Directions
             </label>
             <textarea
@@ -187,7 +239,12 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+<<<<<<< HEAD
           <button type="submit" className="upload-recipe-button">
+=======
+
+          <button type="submit" style={styles.button}>
+>>>>>>> b097114 (Add upload recipe ingredients field and other fixes)
             Upload Recipe
           </button>
         </form>

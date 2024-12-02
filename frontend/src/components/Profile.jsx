@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './profile.css'; 
 
 const Profile = () => {
   const { user, setAuth, setUser } = useContext(AuthContext);
@@ -96,25 +95,25 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <p className="profile-loading">Loading profile...</p>;
+    return <p style={styles.loading}>Loading profile...</p>;
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <h2 className="profile-title">Welcome, {user.username}!</h2>
-        <p className="profile-email">Email: {user.email}</p>
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <h2 style={styles.title}>Welcome, {user.username}!</h2>
+        <p style={styles.email}>Email: {user.email}</p>
       </div>
-      <div className="profile-buttons">
-        <Link to="/upload" className="profile-button">Upload Recipe</Link>
-        <Link to="/search" className="profile-button">Search Recipes</Link>
-        <button onClick={handleLogout} className="profile-logout-button">Logout</button>
+      <div style={styles.buttons}>
+        <Link to="/upload" style={styles.button}>Upload Recipe</Link>
+        <Link to="/search" style={styles.button}>Search Recipes</Link>
+        <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
       </div>
 
-      <div className="profile-section">
-        <h3 className="profile-subtitle">Add Friend</h3>
-        {successMessage && <p className="profile-success-message">{successMessage}</p>}
-        {errorMessage && <p className="profile-error-message">{errorMessage}</p>}
+      <div style={styles.section}>
+        <h3 style={styles.subtitle}>Add Friend</h3>
+        {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
+        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -126,16 +125,16 @@ const Profile = () => {
             placeholder="Enter Email"
             value={friendEmail}
             onChange={(e) => setFriendEmail(e.target.value)}
-            className="profile-input"
+            style={styles.input}
           />
-          <button type="submit" className="profile-button">
+          <button type="submit" style={styles.button}>
             Add Friend
           </button>
         </form>
       </div>
 
-      <div className="profile-section">
-        <h3 className="profile-subtitle">Friends List</h3>
+      <div style={styles.section}>
+        <h3 style={styles.subtitle}>Friends List</h3>
         {friends.length > 0 ? (
           friends.map((friend) => {
             if (!friend._id || !friend.username || !friend.email) {
@@ -143,20 +142,128 @@ const Profile = () => {
               return null;
             }
             return (
-              <div key={friend._id} className="profile-friend">
-                <Link to={`/profile/${friend._id}`} className="profile-friend-link">
+              <div key={friend._id} style={styles.friend}>
+                <Link to={`/profile/${friend._id}`} style={styles.friendLink}>
                   {friend.username}
                 </Link>
-                <span className="profile-friend-email"> - {friend.email}</span>
+                <span style={styles.friendEmail}> - {friend.email}</span>
               </div>
             );
           })
         ) : (
-          <p className="profile-no-friends">You have no friends yet.</p>
+          <p style={styles.noFriends}>You have no friends yet.</p>
         )}
       </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100vw',
+    minHeight: '100vh',
+    padding: '20px',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Funnel Sans, sans-serif',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  header: {
+    marginBottom: '30px',
+    textAlign: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+    width: '100%',
+    maxWidth: '500px',
+  },
+  title: {
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: '10px',
+  },
+  email: {
+    fontSize: '18px',
+    color: '#2c3e50',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    width: '100%',
+    maxWidth: '300px',
+    alignItems: 'center',
+  },
+  button: {
+    padding: '14px',
+    backgroundColor: '#033500',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    cursor: 'pointer',
+    textTransform: 'uppercase',
+    width: '100%',
+  },
+  logoutButton: {
+    padding: '14px',
+    backgroundColor: '#dc3545',
+    color: '#fff',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    fontSize: '18px',
+  },
+  section: {
+    marginTop: '20px',
+    padding: '20px',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderRadius: '8px',
+    width: '100%',
+    maxWidth: '500px',
+  },
+  subtitle: {
+    fontSize: '24px',
+    marginBottom: '10px',
+  },
+  input: {
+    padding: '10px',
+    width: '100%',
+    marginBottom: '10px',
+  },
+  friend: {
+    marginBottom: '10px',
+  },
+  friendLink: {
+    color: '#007bff',
+    textDecoration: 'none',
+  },
+  loading: {
+    fontSize: '24px',
+  },
+  successMessage: {
+    color: '#28a745',
+    marginBottom: '10px',
+  },
+  errorMessage: {
+    color: '#dc3545',
+    marginBottom: '10px',
+  },
+  friendEmail: {
+    color: '#2c3e50',
+  },
+  noFriends: {
+    color: '#999',
+  },
 };
 
 export default Profile;

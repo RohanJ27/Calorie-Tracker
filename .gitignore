@@ -7,4 +7,4 @@ logs
 *.log
 
 # Environment variables
-backend/.env.DS_Store
+backend/.env

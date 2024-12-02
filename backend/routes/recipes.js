@@ -4,7 +4,6 @@ const router = express.Router();
 const axios = require('axios');
 const auth = require('../middleware/auth');
 const dotenv = require('dotenv');
-<<<<<<< HEAD
 const Recipe = require('../models/uploadRecipe');
 const { body, validationResult } = require('express-validator');
 const path = require('path');
@@ -28,21 +27,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Parse range helper function (used for filtering calories, protein, etc.)
-=======
-<<<<<<< HEAD
-const User = require('../models/User'); // Import the User model
-=======
-const Recipe = require('../models/uploadRecipe');
-const { body, validationResult } = require('express-validator');
->>>>>>> taytay
-
-dotenv.config();
-
 /**
  * Parses a range string (e.g., "100-500") into [min, max].
  */
->>>>>>> main
 const parseRange = (rangeStr) => {
   if (!rangeStr || !rangeStr.includes('-')) return [0, Infinity];
   const [minStr, maxStr] = rangeStr.split('-');
@@ -91,11 +78,11 @@ router.get('/search', auth, async (req, res) => {
         image: hit.recipe.image,
         source: hit.recipe.source,
         url: hit.recipe.url,
-        ingredients: hit.recipe.ingredientLines.map(i => i.toLowerCase()),  // Normalize ingredients from Edamam API
+        ingredients: hit.recipe.ingredientLines.map((i) => i.toLowerCase()),
         calories: hit.recipe.calories,
         totalNutrients: hit.recipe.totalNutrients,
-        dietLabels: hit.recipe.dietLabels.map(d => d.toLowerCase()), // Normalize dietLabels
-        healthLabels: hit.recipe.healthLabels.map(h => h.toLowerCase()), // Normalize healthLabels
+        dietLabels: hit.recipe.dietLabels.map((d) => d.toLowerCase()),
+        healthLabels: hit.recipe.healthLabels.map((h) => h.toLowerCase()),
         isExternal: true,
       }));
     } catch (error) {
@@ -105,16 +92,18 @@ router.get('/search', auth, async (req, res) => {
     // Fetch user-uploaded recipes from MongoDB
     const userRecipesQuery = {};
     if (normalizedIngredients.length > 0) {
-      userRecipesQuery.ingredients = { $all: normalizedIngredients };  // Compare with normalized ingredients
+      userRecipesQuery.ingredients = {
+        $elemMatch: { $regex: normalizedIngredients.join('|'), $options: 'i' },
+      };
     }
     if (normalizedDiet) {
       userRecipesQuery.dietLabels = {
-        $in: [new RegExp(^${normalizedDiet}$, 'i')], // Case-insensitive regex match
+        $in: [new RegExp(normalizedDiet, 'i')],
       };
     }
     if (normalizedHealth) {
       userRecipesQuery.healthLabels = {
-        $in: [new RegExp(^${normalizedHealth}$, 'i')],
+        $in: [new RegExp(normalizedHealth, 'i')],
       };
     }
 
@@ -125,11 +114,11 @@ router.get('/search', auth, async (req, res) => {
       image: recipe.image,
       source: recipe.source || 'User Uploaded',
       url: recipe.url || '',
-      ingredients: recipe.ingredients.map(i => i.toLowerCase()), // Normalize ingredients in user recipes
+      ingredients: recipe.ingredients.map((i) => i.toLowerCase()),
       calories: recipe.calories,
       totalNutrients: recipe.totalNutrients,
-      dietLabels: recipe.dietLabels.map(d => d.toLowerCase()), // Normalize dietLabels
-      healthLabels: recipe.healthLabels.map(h => h.toLowerCase()), // Normalize healthLabels
+      dietLabels: recipe.dietLabels.map((d) => d.toLowerCase()),
+      healthLabels: recipe.healthLabels.map((h) => h.toLowerCase()),
       isExternal: false,
     }));
 
@@ -165,47 +154,71 @@ router.get('/search', auth, async (req, res) => {
  * @desc    Upload a new recipe with image
  * @access  Protected
  */
-// POST /upload route
 router.post(
   '/upload',
   auth,
-  upload.single('image'), // Handle image upload
-  (req, res, next) => {
-    console.log('Request Body:', req.body);  // Log request body
-    console.log('Uploaded File:', req.file);  // Log the uploaded file 
-    next();  // Proceed to the next middleware or route handler
-  },
+  upload.single('image'),
   [
     body('label').notEmpty().withMessage('Label is required'),
-    body('ingredients').notEmpty().withMessage('Ingredients are required'),
-    body('calories').optional().isNumeric().withMessage('Calories must be a number'),
-    body('dietLabels').optional().isArray().withMessage('Diet labels must be an array'),
-    body('healthLabels').optional().isArray().withMessage('Health labels must be an array'),
+    body('ingredients')
+      .custom((value) => {
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed);
+        } catch {
+          return false;
+        }
+      })
+      .withMessage('Ingredients must be a valid JSON array'),
+    body('dietLabels')
+      .custom((value) => {
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed);
+        } catch {
+          return false;
+        }
+      })
+      .withMessage('Diet labels must be a valid JSON array'),
+    body('healthLabels')
+      .custom((value) => {
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed);
+        } catch {
+          return false;
+        }
+      })
+      .withMessage('Health labels must be a valid JSON array'),
     body('directions').optional().isString().withMessage('Directions must be a string'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log('Validation Errors:', errors.array());  // Log validation errors
+      console.error('Validation Errors:', errors.array());
       return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     try {
       const { label, ingredients, calories, dietLabels, healthLabels, directions } = req.body;
 
-      // Save the new recipe to the database
+      // Parse fields into arrays
+      const parsedIngredients = JSON.parse(ingredients);
+      const parsedDietLabels = JSON.parse(dietLabels);
+      const parsedHealthLabels = JSON.parse(healthLabels);
+
       const newRecipe = new Recipe({
         userId: req.user.id,
-        label,
-        image: req.file ? /uploads/${req.file.filename} : null, // Save image file path
-        ingredients: JSON.parse(ingredients),
-        calories,
-        dietLabels: JSON.parse(dietLabels),  // Diet labels should be an array
-        healthLabels: JSON.parse(healthLabels),  // Health labels should be an array
+        label: label.toLowerCase(),
+        image: req.file ? `/uploads/${req.file.filename}` : null,
+        ingredients: parsedIngredients.map((i) => i.toLowerCase()),
+        dietLabels: parsedDietLabels.map((d) => d.toLowerCase()),
+        healthLabels: parsedHealthLabels.map((h) => h.toLowerCase()),
         directions,
       });
 
       await newRecipe.save();
+      console.log('✅ Recipe uploaded:', newRecipe);
       res.status(201).json({ success: true, message: 'Recipe uploaded successfully!', recipe: newRecipe });
     } catch (error) {
       console.error('Error uploading recipe:', error.message);
@@ -213,8 +226,6 @@ router.post(
     }
   }
 );
-
-
 
 /**
  * @route   GET /api/recipes/:id

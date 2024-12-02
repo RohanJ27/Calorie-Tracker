@@ -8,41 +8,50 @@ const UploadRecipeForm = () => {
     calories: '',
     dietLabels: '',
     healthLabels: '',
-    image: '',
-    directions: '', // Add directions to state
+    image: null, // For file upload
+    directions: '',
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData((prev) => ({ ...prev, image: files[0] })); // Store file
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Format the data before sending it to the backend
-    const formattedData = {
-      ...formData,
-      ingredients: formData.ingredients.split(',').map((item) => item.trim()),
-      dietLabels: formData.dietLabels.split(',').map((item) => item.trim()),
-      healthLabels: formData.healthLabels.split(',').map((item) => item.trim()),
-    };
-  
+    const form = new FormData();
+    form.append('label', formData.label);
+    form.append('ingredients', JSON.stringify(formData.ingredients.split(',').map((item) => item.trim())));
+    form.append('calories', formData.calories);
+    form.append('dietLabels', JSON.stringify(formData.dietLabels.split(',').map((item) => item.trim())));
+    form.append('healthLabels', JSON.stringify(formData.healthLabels.split(',').map((item) => item.trim())));
+    form.append('directions', formData.directions);
+
+    if (formData.image) {
+      form.append('image', formData.image);
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/recipes/upload', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is present
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(formattedData),
+        body: form,
       });
-  
+
       if (response.ok) {
         alert('Recipe uploaded successfully!');
-        navigate('/profile'); // Redirect to profile after successful upload
+        navigate('/profile');
       } else {
         const errorData = await response.json();
+        console.error('Upload Error:', errorData);
         alert(`Error: ${errorData.error || 'Failed to upload recipe'}`);
       }
     } catch (error) {
@@ -95,10 +104,8 @@ const UploadRecipeForm = () => {
         onChange={handleChange}
       />
       <input
-        type="text"
+        type="file"
         name="image"
-        placeholder="Image URL"
-        value={formData.image}
         onChange={handleChange}
       />
       <textarea

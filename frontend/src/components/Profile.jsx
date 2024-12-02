@@ -153,26 +153,6 @@ const Profile = () => {
         ) : (
           <p style={styles.noFriends}>You have no friends yet.</p>
         )}
-        {/* Navigate to Upload Recipe page */}
-        <button
-          onClick={() => navigate('/upload')}
-          style={styles.button}
-        >
-          Upload Recipe
-        </button>
-
-        {/* Navigate to Search Recipes page */}
-        <button
-          onClick={() => navigate('/search')}
-          style={styles.button}
-        >
-          Search Recipes
-        </button>
-
-        {/* Logout button */}
-        <button onClick={handleLogout} style={styles.logoutButton}>
-          Logout
-        </button>
       </div>
     </div>
   );
@@ -204,7 +184,6 @@ const styles = {
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
     width: '100%',
     maxWidth: '500px',
-    
   },
   title: {
     fontSize: '40px',
@@ -233,53 +212,33 @@ const styles = {
     fontWeight: 'bold',
     fontSize: '18px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
     textTransform: 'uppercase',
-    letterSpacing: '1px',
     width: '100%',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
-    textAlign: 'center',
   },
   logoutButton: {
     padding: '14px',
     backgroundColor: '#dc3545',
     color: '#fff',
-    border: 'none',
     borderRadius: '8px',
     fontWeight: 'bold',
     fontSize: '18px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    width: '100%',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
   },
   section: {
     marginTop: '20px',
     padding: '20px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    color: '#2c3e50',
     borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     width: '100%',
     maxWidth: '500px',
   },
   subtitle: {
     fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#2c3e50',
     marginBottom: '10px',
   },
   input: {
     padding: '10px',
-    fontSize: '16px',
     width: '100%',
     marginBottom: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ddd',
-    boxSizing: 'border-box',
-    fontFamily: 'Funnel Sans, sans-serif',
   },
   friend: {
     marginBottom: '10px',
@@ -290,17 +249,20 @@ const styles = {
   },
   loading: {
     fontSize: '24px',
-    color: '#999',
   },
   successMessage: {
     color: '#28a745',
-    fontWeight: 'bold',
     marginBottom: '10px',
   },
   errorMessage: {
     color: '#dc3545',
-    fontWeight: 'bold',
     marginBottom: '10px',
+  },
+  friendEmail: {
+    color: '#2c3e50',
+  },
+  noFriends: {
+    color: '#999',
   },
 };
 

@@ -12,14 +12,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
-<<<<<<< HEAD
-
-import AuthSuccess from './components/AuthSuccess'; 
-=======
 import AuthSuccess from './components/AuthSuccess';
 import UploadRecipe from './components/UploadRecipe';
 import RecipeDetails from './components/RecipeDetails'; // Add RecipeDetails component
->>>>>>> merge-to-main
 
 function App() {
   return (
@@ -51,33 +46,6 @@ function App() {
                   }
                 />
                 <Route
-<<<<<<< HEAD
-                    path="/search"
-                    element={
-                      <ProtectedRoute>
-                        <SearchForm />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/results"
-                    element={
-                      <ProtectedRoute>
-                        <SearchResults />
-                      </ProtectedRoute>
-                    }
-                  />
-                  {}
-                <Route path="/auth/success" element={<AuthSuccess />} />
-                {}
-                  <Route path="*" element={<Home />} />
-                </Routes>
-              </div>
-            </ErrorBoundary>
-          </RecipeProvider>
-        </AuthProvider>
-      
-=======
                   path="/search"
                   element={
                     <ProtectedRoute>
@@ -117,7 +85,6 @@ function App() {
           </ErrorBoundary>
         </RecipeProvider>
       </AuthProvider>
->>>>>>> merge-to-main
     </Router>
   );
 }

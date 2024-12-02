@@ -74,7 +74,6 @@ const SearchForm = () => {
       });
   
       const { recipes, total } = res.data;
-<<<<<<< HEAD
 
       // Simulate a delay using a timeout
       setTimeout(() => {
@@ -86,13 +85,6 @@ const SearchForm = () => {
       }, 150); 
        
       
-=======
-  
-      setRecipes(recipes);
-      setTotal(total);
-  
-      navigate('/results');
->>>>>>> merge-to-main
     } catch (err) {
       console.error('🛑 Recipe Search Error:', err);
       setError(

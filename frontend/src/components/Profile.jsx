@@ -57,7 +57,6 @@ const Profile = () => {
     navigate('/login');
   };
 
-<<<<<<< HEAD
   const addFriend = async () => {
     setErrorMessage('');
     setSuccessMessage('');
@@ -97,10 +96,6 @@ const Profile = () => {
 
   if (!user) {
     return <p style={styles.loading}>Loading profile...</p>;
-=======
-  if (!user) {
-    return <p>Loading profile...</p>;
->>>>>>> merge-to-main
   }
 
   return (
@@ -110,7 +105,6 @@ const Profile = () => {
         <p style={styles.email}>Email: {user.email}</p>
       </div>
       <div style={styles.buttons}>
-<<<<<<< HEAD
         <Link to="/upload" style={styles.button}>Upload Recipe</Link>
         <Link to="/search" style={styles.button}>Search Recipes</Link>
         <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
@@ -159,7 +153,6 @@ const Profile = () => {
         ) : (
           <p style={styles.noFriends}>You have no friends yet.</p>
         )}
-=======
         {/* Navigate to Upload Recipe page */}
         <button
           onClick={() => navigate('/upload')}
@@ -180,7 +173,6 @@ const Profile = () => {
         <button onClick={handleLogout} style={styles.logoutButton}>
           Logout
         </button>
->>>>>>> merge-to-main
       </div>
     </div>
   );
@@ -245,12 +237,8 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     width: '100%',
-<<<<<<< HEAD
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
-=======
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     textAlign: 'center',
->>>>>>> merge-to-main
   },
   logoutButton: {
     padding: '14px',
@@ -300,7 +288,6 @@ const styles = {
     color: '#007bff',
     textDecoration: 'none',
   },
-<<<<<<< HEAD
   loading: {
     fontSize: '24px',
     color: '#999',
@@ -315,8 +302,6 @@ const styles = {
     fontWeight: 'bold',
     marginBottom: '10px',
   },
-=======
->>>>>>> merge-to-main
 };
 
 export default Profile;

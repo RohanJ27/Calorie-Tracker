@@ -53,7 +53,6 @@ const Navbar = () => {
         <Link to="/search" className="nav-link">Search Recipes</Link>
         {auth ? (
           <>
-            {/* Display User's Score */}
             {user && (
               <span className="user-score">Score: {user.score}</span>
             )}

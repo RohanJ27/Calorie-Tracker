@@ -12,25 +12,21 @@ const fs = require('fs');
 
 dotenv.config();
 
-// Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, '../uploads');
     if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath); // Ensure uploads directory exists
+      fs.mkdirSync(uploadPath);
     }
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename with timestamp
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
 const upload = multer({ storage });
 
-/**
- * Parses a range string (e.g., "100-500") into [min, max].
- */
 const parseRange = (rangeStr) => {
   if (!rangeStr || !rangeStr.includes('-')) return [0, Infinity];
   const [minStr, maxStr] = rangeStr.split('-');
@@ -45,9 +41,16 @@ const parseRange = (rangeStr) => {
  * @access  Protected
  */
 router.get('/search', auth, async (req, res) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    { $inc: { score: 1 } },
+    { new: true }
+  );
+
+  console.log(`User ${req.user.id} new score: ${updatedUser.score}`);
+
   const { ingredients, diet, health, calories, protein, fat, carbs } = req.query;
 
-  // Normalize the search terms: ingredients, diet, health to lowercase and trim spaces
   const normalizedIngredients = ingredients
     ? ingredients.split(',').map((i) => i.trim().toLowerCase())
     : [];
@@ -57,7 +60,6 @@ router.get('/search', auth, async (req, res) => {
   try {
     console.log('Search query received:', req.query);
 
-    // Fetch recipes from Edamam API
     let edamamRecipes = [];
     try {
       const apiResponse = await axios.get('https://api.edamam.com/search', {
@@ -90,7 +92,6 @@ router.get('/search', auth, async (req, res) => {
       console.error('Error fetching from Edamam API:', error.message);
     }
 
-    // Fetch user-uploaded recipes from MongoDB
     const userRecipesQuery = {};
     if (normalizedIngredients.length > 0) {
       userRecipesQuery.ingredients = {
@@ -123,7 +124,6 @@ router.get('/search', auth, async (req, res) => {
       isExternal: false,
     }));
 
-    // Combine results from Edamam and MongoDB
     let combinedRecipes = [...edamamRecipes, ...formattedUserRecipes];
     if (protein || fat || carbs) {
       const [minProtein, maxProtein] = parseRange(protein);
@@ -143,7 +143,7 @@ router.get('/search', auth, async (req, res) => {
       });
     }
 
-    res.json({ success: true, recipes: combinedRecipes.slice(0, 20), total: combinedRecipes.length });
+    res.json({ success: true, recipes: combinedRecipes.slice(0, 20), total: combinedRecipes.length, score: updatedUser.score });
   } catch (error) {
     console.error('Error fetching recipes:', error.message);
     res.status(500).json({ success: false, error: 'Failed to fetch recipes' });
@@ -215,7 +215,7 @@ router.post(
         ingredients: parsedIngredients.map((i) => i.toLowerCase()),
         dietLabels: parsedDietLabels.map((d) => d.toLowerCase()),
         healthLabels: parsedHealthLabels.map((h) => h.toLowerCase()),
-        calories: parseFloat(calories), // Save the calories as a number
+        calories: parseFloat(calories), 
         directions,
       });
 

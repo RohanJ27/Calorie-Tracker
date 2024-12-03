@@ -6,8 +6,6 @@ import './Navbar.css';
 const Navbar = () => {
   const { auth, user, setAuth, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  
-  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -17,20 +15,13 @@ const Navbar = () => {
   };
 
   const handleDarkModeToggle = () => {
-
-    if (document.body.style.filter != 'invert(100%) hue-rotate(180deg)')
-    {
+    if (document.body.style.filter !== 'invert(100%) hue-rotate(180deg)') {
       document.body.style.filter = 'invert(100%) hue-rotate(180deg)';
-      document.getElementById("togTex").innerText = "Dark";
-    }
-    else
-    {
+      document.getElementById('togTex').innerText = 'Dark';
+    } else {
       document.body.style.filter = 'none';
-      document.getElementById("togTex").innerText = "Light";
+      document.getElementById('togTex').innerText = 'Light';
     }
-    
-
-
   };
 
   return (
@@ -38,25 +29,26 @@ const Navbar = () => {
       <div className="logo">
         <Link to="/" className="logo-text">RecipeFit</Link>
       </div>
-      <div class="toggle-container">
-        <label class="switch">
-          <input type="checkbox" 
-            class = "colorTrans"
-            onClick={handleDarkModeToggle} 
-            />
-          <span class="slider round"></span>
+      <div className="toggle-container">
+        <label className="switch">
+          <input
+            type="checkbox"
+            className="colorTrans"
+            onClick={handleDarkModeToggle}
+          />
+          <span className="slider round"></span>
         </label>
-        <p class="toggleText" id ="togTex">Light</p>
+        <p className="toggleText" id="togTex">Light</p>
       </div>
-      
+
       <div className="nav-links">
         <Link to="/search" className="nav-link">Search Recipes</Link>
         {auth ? (
           <>
+            <Link to="/profile" className="nav-link">Account Details</Link>
             {user && (
               <span className="user-score">Score: {user.score}</span>
             )}
-            <Link to="/profile" className="nav-link">Account Details</Link>
             <button onClick={handleLogout} className="logout-button">Logout</button>
           </>
         ) : (

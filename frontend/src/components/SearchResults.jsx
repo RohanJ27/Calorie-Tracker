@@ -1,10 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RecipeContext from '../context/RecipeContext';
-<<<<<<< HEAD
-import './searchResults.css';
-=======
->>>>>>> origin/main
 
 const SearchResults = () => {
   const { recipes, total } = useContext(RecipeContext);
@@ -34,7 +30,6 @@ const SearchResults = () => {
   };
 
   if (loading) {
-
     return <div style={styles.loading}>Loading recipes...</div>;
   }
 
@@ -52,18 +47,6 @@ const SearchResults = () => {
       <p style={styles.total}>Total Recipes Found: {total}</p>
       <div style={styles.recipesContainer}>
         {recipes.map((recipe, index) => (
-<<<<<<< HEAD
-          <div key={index} className="search-results-card">
-            <img
-              src={recipe.image}
-              alt={recipe.label}
-              className="search-results-image"
-            />
-            <div className="search-results-content">
-              <h3 className="search-results-recipe-title">{recipe.label}</h3>
-              <p className="search-results-text">
-                <strong>Source:</strong> {recipe.source || 'User Uploaded'}
-=======
           <div key={index} style={styles.card}>
             <img
               src={recipe.isExternal ? recipe.image : `http://localhost:5000${recipe.image}`}
@@ -81,7 +64,6 @@ const SearchResults = () => {
               </h3>
               <p style={styles.text}>
                 <strong>Source:</strong> {recipe.source || 'Unknown'}
->>>>>>> origin/main
               </p>
               <p style={styles.text}>
                 <strong>Calories:</strong> {recipe.calories ? Math.round(recipe.calories) : 'N/A'}
@@ -112,33 +94,12 @@ const SearchResults = () => {
                       .join(', ')
                   : 'N/A'}
               </p>
-<<<<<<< HEAD
-              {/* Check if recipe has a URL (Edamam recipe) or an ID (user-uploaded recipe) */}
-              {recipe.url ? (
-                <a
-                  href={recipe.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="search-results-link"
-                >
-                  View Recipe
-                </a>
-              ) : (
-                <Link
-                  to={`/recipe/${recipe.id}`}
-                  className="search-results-link"
-                >
-                  View Recipe
-                </Link>
-              )}
-=======
               <button
                 onClick={() => handleViewRecipe(recipe)}
                 style={styles.link} // Keep the button styled as a link
               >
                 View Recipe
               </button>
->>>>>>> origin/main
             </div>
           </div>
         ))}
@@ -191,7 +152,6 @@ const styles = {
     width: '100%',
     height: '200px',
     objectFit: 'cover',
-
   },
   content: {
     padding: '20px',

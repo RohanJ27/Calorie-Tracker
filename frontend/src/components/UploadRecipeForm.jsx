@@ -144,6 +144,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="dietLabels" style={styles.label}>
               Diet Labels
@@ -159,6 +160,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="healthLabels" style={styles.label}>
               Health Labels
@@ -174,6 +176,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="image" style={styles.label}>
               Upload Image
@@ -187,6 +190,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label htmlFor="directions" style={styles.label}>
               Directions
@@ -201,6 +205,7 @@ const UploadRecipeForm = () => {
               required
             />
           </div>
+
           <button type="submit" style={styles.button}>
             Upload Recipe
           </button>

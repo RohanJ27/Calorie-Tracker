@@ -47,7 +47,12 @@ const Navbar = () => {
           <>
             <Link to="/profile" className="nav-link">Account Details</Link>
             {user && (
-              <span className="user-score">Score: {user.score}</span>
+              <span className="user-score">
+                Score: {user.score}
+                <span className="tooltip-text">
+                  Your score increases when you search for recipes!
+                </span>
+              </span>
             )}
             <button onClick={handleLogout} className="logout-button">Logout</button>
           </>

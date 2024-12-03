@@ -48,11 +48,11 @@ Go to https://account.mongodb.com/account/register
 ![Alt Text](https://i.sstatic.net/ITq6c.png "Optional Tooltip")
 
 
-5. Create a Edamame API account
-- Edamme is the API that we use to search for recipes and returns the recipes back in JSON format. We can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
+5. Create a Edamam API account
+- Edamam is the API that we use to search for recipes and returns the recipes back in JSON format. We can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
 
 
-Here is how to sign up for the Edameme API
+Here is how to sign up for the Edamam API
 
 
 - Go to https://www.edamam.com/

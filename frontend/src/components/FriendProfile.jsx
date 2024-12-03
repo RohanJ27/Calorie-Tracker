@@ -34,6 +34,7 @@ const FriendProfile = () => {
       <div style={styles.header}>
         <h2 style={styles.title}>{profile.username}'s Profile</h2>
         <p style={styles.email}>Email: {profile.email}</p>
+        <p style={styles.score}>Score: {profile.score}</p>
       </div>
       <div style={styles.buttons}>
         <Link to="/profile" style={styles.button}>
@@ -102,7 +103,10 @@ const styles = {
     fontSize: '18px',
     color: '#2c3e50',
   },
-  buttons: {
+  score: {
+    fontSize: '18px',
+    color: '#2c3e50',
+  },  buttons: {
     display: 'flex',
     flexDirection: 'column',
     gap: '15px',

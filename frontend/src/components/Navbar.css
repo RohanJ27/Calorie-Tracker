@@ -100,7 +100,6 @@
   gap: 10px;
   justify-content: space-between;
   margin-left: 20px;
-  /* margin-right: 600px;     */
 }
 
 .switch {
@@ -211,10 +210,9 @@ input:checked+.slider:before {
   opacity: 1;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .user-score .tooltip-text {
-    width: 90vw; /* Use most of the viewport width */
+    width: 90vw;
     left: 50%;
     transform: translateX(-50%);
     font-size: 14px;

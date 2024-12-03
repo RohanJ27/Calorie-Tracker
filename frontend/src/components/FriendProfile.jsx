@@ -34,7 +34,6 @@ const FriendProfile = () => {
       <div style={styles.header}>
         <h2 style={styles.title}>{profile.username}'s Profile</h2>
         <p style={styles.email}>Email: {profile.email}</p>
-        <p style={styles.email}>Score: {profile.score}</p>
       </div>
       <div style={styles.buttons}>
         <Link to="/profile" style={styles.button}>

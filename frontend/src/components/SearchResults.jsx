@@ -85,7 +85,7 @@ const SearchResults = () => {
               </p>
               <button
                 onClick={() => handleViewRecipe(recipe)}
-                style={styles.link} // Keep the button styled as a link
+                style={styles.link} 
               >
                 View Recipe
               </button>

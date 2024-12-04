@@ -51,7 +51,6 @@ const SearchForm = () => {
     try {
       const params = {};
   
-      // Normalize ingredients, diet, and health labels to lowercase and trim spaces
       if (ingredients) {
         params.ingredients = ingredients.split(',').map(i => i.trim().toLowerCase()).join(',');
       }
@@ -97,14 +96,12 @@ const SearchForm = () => {
 
   return (
     <div style={styles.container}>
-      {/* Fullscreen Spinner */}
       {loading && (
         <div style={styles.spinnerOverlay}>
           <BounceLoader color="#033500" size={200} />
         </div>
       )}
 
-      {/* Search Form */}
       <h2 style={styles.title}>Find Your Perfect Recipe</h2>
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={onSubmit} style={styles.form}>

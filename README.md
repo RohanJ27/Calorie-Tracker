@@ -26,6 +26,8 @@ PORT=5000
 FRONTEND_URL=http://localhost:5173
 ```
 
+STEPS TO RUN THE PROJECT
+
 1. run git clone https://github.com/RohanJ27/RecipeFit.git in your terminal
 
 2. cd into the repository and then cd in frontend and run npm install
@@ -43,7 +45,7 @@ FRONTEND_URL=http://localhost:5173
 
 ![Alt Text](https://i.sstatic.net/ITq6c.png "Optional Tooltip")
 
-5. Create a Edamam API account
+5. Create an Edamam API account
 
 - Edamam is the API that we use to search for recipes and returns the recipes back in JSON format. We can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
 

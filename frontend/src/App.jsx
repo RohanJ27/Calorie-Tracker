@@ -14,7 +14,7 @@ import RecipeProvider from './context/RecipeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 import AuthSuccess from './components/AuthSuccess';
 import UploadRecipe from './components/UploadRecipe';
-import RecipeDetails from './components/RecipeDetails'; // Add RecipeDetails component
+import RecipeDetails from './components/RecipeDetails'; 
 
 function App() {
   return (
@@ -70,7 +70,6 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                {/* Add the RecipeDetails route */}
                 <Route
                   path="/recipes/:id"
                   element={

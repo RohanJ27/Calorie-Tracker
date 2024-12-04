@@ -12,7 +12,7 @@ const UploadRecipeForm = () => {
     directions: '',
   });
 
-  const [message, setMessage] = useState(null); // For success or error messages
+  const [message, setMessage] = useState(null); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -80,7 +80,7 @@ const UploadRecipeForm = () => {
       if (response.ok) {
         setMessage({ type: 'success', text: 'Recipe uploaded successfully!' });
         setTimeout(() => {
-          navigate('/'); // Redirect to home after 1 second
+          navigate('/'); 
         }, 1000);
       } else {
         const errorData = await response.json();
@@ -262,7 +262,7 @@ const styles = {
     transform: 'translateX(-50%)',
     padding: '16px 24px',
     borderRadius: '10px',
-    fontSize: '20px', // Larger font size
+    fontSize: '20px', 
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#fff',
@@ -294,8 +294,8 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     fontSize: '14px',
-    backgroundColor: '#fff', // White background
-    color: '#2c3e50',        // Dark text
+    backgroundColor: '#fff', 
+    color: '#2c3e50',       
     fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
   },  
   textarea: {

@@ -15,6 +15,7 @@ We have to set up the .env file in the backend to consist of our own MONGO_URI a
 
 
 Here is what your backend/.env file should look like
+
 MONGO_URI=your mongo_uri
 JWT_SECRET=your_jwt_secret_here
 EDAMAM_APP_ID=your_edamam_app_id

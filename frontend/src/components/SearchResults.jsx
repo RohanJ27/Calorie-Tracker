@@ -29,17 +29,6 @@ const SearchResults = () => {
     }
   };
 
-  if (loading) {
-    return <div style={styles.loading}>Loading recipes...</div>;
-  }
-
-  if (!loading && recipes.length === 0) {
-    return (
-      <div style={styles.loading}>
-        <p>No recipes found. Try adjusting your search criteria.</p>
-      </div>
-    );
-  }
 
   return (
     <div style={styles.container}>
@@ -116,7 +105,6 @@ const styles = {
     backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    minHeight: '100vh',
     boxSizing: 'border-box',
   },
   title: {
@@ -182,12 +170,6 @@ const styles = {
     fontSize: '16px',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
     cursor: 'pointer',
-  },
-  loading: {
-    textAlign: 'center',
-    marginTop: '50px',
-    fontSize: '18px',
-    color: '#fff',
   },
 };
 

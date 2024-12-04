@@ -75,14 +75,13 @@ const SearchForm = () => {
   
       const { recipes, total } = res.data;
 
-      // Simulate a delay using a timeout
-      setTimeout(() => {
+      if (!recipes || recipes.length === 0) {
+        setError('No recipes found. Try adjusting your search criteria.');
+      } else {
         setRecipes(recipes);
         setTotal(total);
-        setLoading(false);
         navigate('/results');
-        
-      }, 150); 
+      }
        
       
     } catch (err) {

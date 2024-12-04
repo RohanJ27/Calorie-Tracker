@@ -15,7 +15,7 @@ We have to set up the .env file in the backend to consist of our own MONGO_URI a
 
 
 Here is what your backend/.env file should look like:
-
+```
 MONGO_URI=your mongo_uri
 
 JWT_SECRET=your_jwt_secret_here
@@ -31,7 +31,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 PORT=5000
     
 FRONTEND_URL=http://localhost:5173
-
+```
 
 1. run git clone https://github.com/RohanJ27/RecipeFit.git in your terminal
 
@@ -120,13 +120,21 @@ To run the app locally
 
 
 To start the frontend:
-cd frontned
-type: npm run dev
+```
+cd frontend
+```
+```
+npm run dev
+```
 
 
 To start the backend:
+```
 cd backend
-type: node index.js
+```
+```
+node index.js
+```
 
 
 Now the app is running locally!

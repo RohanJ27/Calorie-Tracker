@@ -14,15 +14,22 @@ Heres how you can run our app locally:
 We have to set up the .env file in the backend to consist of our own MONGO_URI and API Keys to allow for the backend to fully function. If you go to the backend and check out .env.example file, we can see that we need MONGO_URI, EDAMAME API keys, and GOOGLE CLOUD CONSOLE Ids. Lets get these set up.
 
 
-Here is what your backend/.env file should look like
+Here is what your backend/.env file should look like:
 
 MONGO_URI=your mongo_uri
+
 JWT_SECRET=your_jwt_secret_here
+
 EDAMAM_APP_ID=your_edamam_app_id
+
 EDAMAM_APP_KEY=your_edamam_app_key
+
 GOOGLE_CLIENT_ID=your_google_client_id
+   
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+  
 PORT=5000
+    
 FRONTEND_URL=http://localhost:5173
 
 

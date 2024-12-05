@@ -103,7 +103,7 @@ const Profile = () => {
       <div style={styles.header}>
         <h2 style={styles.title}>Welcome, {user.username}!</h2>
         <p style={styles.email}>Email: {user.email}</p>
-        <p style={styles.score}>Score: {user.score || 'N/A'}</p>
+        <p style={styles.score}>Score: {user.score}</p>
       </div>
       <div style={styles.buttons}>
         <Link to="/upload" style={styles.button}>Upload Recipe</Link>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './RecipeDetails.css'; 
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -41,123 +42,61 @@ const RecipeDetails = () => {
       .join(' ');
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="recipe-details-loading">Loading...</p>;
+
   if (error || !recipe)
     return (
-      <div style={styles.container}>
-        <h1 style={styles.title}>Recipe Not Found</h1>
-        <p style={styles.text}>The recipe you're looking for doesn't exist.</p>
+      <div className="recipe-details-error">
+        <h1 className="recipe-details-error-title">Recipe Not Found</h1>
+        <p className="recipe-details-error-text">The recipe you're looking for doesn't exist.</p>
       </div>
     );
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>
+    <div className="recipe-details-container">
+      <div className="recipe-details-card">
+        <h1 className="recipe-details-title">
           {recipe.label ? capitalizeWords(recipe.label) : 'Recipe Name Not Available'}
         </h1>
-        <div style={styles.imageContainer}>
+        <div className="recipe-details-image-container">
           {recipe.image ? (
             <img
-              src={recipe.image.startsWith('http') ? recipe.image : `http://localhost:5000${recipe.image}`}
+              src={
+                recipe.image.startsWith('http')
+                  ? recipe.image
+                  : `http://localhost:5000${recipe.image}`
+              }
               alt={recipe.label}
-              style={styles.image}
+              className="recipe-details-image"
             />
           ) : (
-            <p style={styles.text}>No image available.</p>
+            <p className="recipe-details-text">No image available.</p>
           )}
         </div>
-        <div style={styles.details}>
-          <h2 style={styles.subTitle}>Ingredients:</h2>
+        <div className="recipe-details-details">
+          <h2 className="recipe-details-subtitle">Ingredients:</h2>
           {recipe.ingredients?.length > 0 ? (
-            <ul style={styles.list}>
+            <ul className="recipe-details-list">
               {recipe.ingredients.map((ing, index) => (
-                <li key={index} style={styles.listItem}>
+                <li key={index} className="recipe-details-list-item">
                   {capitalizeWords(ing)}
                 </li>
               ))}
             </ul>
           ) : (
-            <p style={styles.text}>No ingredients available.</p>
+            <p className="recipe-details-text">No ingredients available.</p>
           )}
 
-          <h2 style={styles.subTitle}>Directions:</h2>
+          <h2 className="recipe-details-subtitle">Directions:</h2>
           {recipe.directions ? (
-            <p style={styles.text}>{recipe.directions}</p>
+            <p className="recipe-details-text">{recipe.directions}</p>
           ) : (
-            <p style={styles.text}>No directions available.</p>
+            <p className="recipe-details-text">No directions available.</p>
           )}
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'Funnel Sans, sans-serif',
-    backgroundImage: 'url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    padding: '20px',
-    boxSizing: 'border-box',
-    width: '100vw',
-  },
-  card: {
-    width: '90%',
-    maxWidth: '800px',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: '8px',
-    padding: '20px',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-  },
-  imageContainer: {
-    width: '100%',
-    height: '300px',
-    overflow: 'hidden',
-    marginBottom: '20px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '8px',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: '20px',
-    color: '#2c3e50',
-  },
-  subTitle: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    marginBottom: '10px',
-    color: '#2c3e50',
-  },
-  text: {
-    fontSize: '16px',
-    lineHeight: '1.5',
-    color: '#2c3e50',
-  },
-  list: {
-    paddingLeft: '20px',
-  },
-  listItem: {
-    marginBottom: '8px',
-    color: '#2c3e50',
-    fontWeight: 'bold',
-  },
 };
 
 export default RecipeDetails;

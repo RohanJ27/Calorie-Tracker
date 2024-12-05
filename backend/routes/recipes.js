@@ -203,7 +203,7 @@ router.post(
     try {
       const { label, ingredients, calories, dietLabels, healthLabels, directions } = req.body;
 
-      // Parse fields into arrays
+      
       const parsedIngredients = JSON.parse(ingredients);
       const parsedDietLabels = JSON.parse(dietLabels);
       const parsedHealthLabels = JSON.parse(healthLabels);

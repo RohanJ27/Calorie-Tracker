@@ -1,0 +1,92 @@
+.home-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Funnel Sans', sans-serif;
+    background-image: url("https://i.pinimg.com/originals/19/68/b0/1968b06afc1ef281a748c9b307e39f06.jpg");
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+  
+ 
+  .home-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.7) 30%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    box-sizing: border-box;
+  }
+  
+
+  .home-content {
+    max-width: 500px;
+    color: #2c3e50;
+  }
+  
+
+  .home-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+
+  .home-subtitle {
+    font-size: 20px;
+    color: #5a6465;
+    margin-bottom: 20px;
+  }
+  
+
+  .home-buttons {
+    display: flex;
+    gap: 20px;
+  }
+  
+
+  .home-button {
+    padding: 12px 24px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+
+  .home-button.signup {
+    background-color: #66bb6a;
+  }
+  
+  .home-button.signup:hover {
+    background-color: #4CAF50;
+  }
+  
+
+  .home-button.login {
+    background-color: #033500;
+  }
+  
+  .home-button.login:hover {
+    background-color: #022400;
+  }
+  

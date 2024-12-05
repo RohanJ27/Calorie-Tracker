@@ -7,7 +7,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 import './SearchForm.css'; 
 
 const SearchForm = () => {
-  const { auth } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const { setRecipes, setTotal } = useContext(RecipeContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -94,6 +94,7 @@ const SearchForm = () => {
         setError('No recipes found. Try adjusting your search criteria.');
       } else {
         setRecipes(recipes);
+        setUser({...user, score: res.data.score});
         setTotal(total);
         navigate('/results');
       }

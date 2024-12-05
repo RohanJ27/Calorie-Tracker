@@ -1,17 +1,23 @@
-Welcome to RecipeFit - the all-in-one Recipe app where you can create, search for, and socialize based off of your dietary needs!
+# RecipeFit
+Welcome to RecipeFit - the all-in-one Recipe app where you can create, search for, and socialize based on of your dietary needs!
 
-If you have a limited list of ingredients at home, a peanut allergy that restricts food choices, or just want to keep track of your healthy eating RecipeFit provides a solution and much more.
+If you have a limited list of ingredients at home, a peanut allergy that restricts food choices, or just want to keep track of your healthy eating, RecipeFit provides a solution and much more.
 
-Heres how you can run our app locally:
+# Run the App Locally
 
-We have to set up the .env file in the backend to consist of our own MONGO_URI and API Keys to allow for the backend to fully function. If you go to the backend and check out .env.example file, we can see that we need MONGO_URI, EDAMAME API keys, and GOOGLE CLOUD CONSOLE Ids. Lets get these set up.
+You have to set up the ```.env``` file in the backend to include your own ```MONGO_URI``` and API Keys to allow the backend to function fully. If you go to the backend folder and check ```.env.example``` file, you can see that you need the following:
+- ```MONGO_URI```
+- EDAMAM API keys
+- GOOGLE CLOUD CONSOLE IDs
 
-Here is what your backend/.env file should look like:
+Let's get these set up!
+
+Here is what your ```backend/.env``` file should look like:
 
 ```
-MONGO_URI=your mongo_uri
+MONGO_URI=your_mongo_uri
 
-JWT_SECRET=your_jwt_secret_here
+JWT_SECRET=your_jwt_secret
 
 EDAMAM_APP_ID=your_edamam_app_id
 
@@ -26,91 +32,97 @@ PORT=5000
 FRONTEND_URL=http://localhost:5173
 ```
 
-STEPS TO RUN THE PROJECT
+## Getting Started
 
-1. run git clone https://github.com/RohanJ27/RecipeFit.git in your terminal
+1. Run the following command in your terminal:
+    ```
+   git clone https://github.com/RohanJ27/RecipeFit.git
+    ```
+2. Navigate into the repository and then the ```frontend``` folder and run npm install:
+   ```
+   cd RecipeFit
+   cd frontend
+   npm install
+   ```
+3. Navigate into the ```backend``` folder and install the dependencies:
+   ```
+   cd ../backend
+   npm install
+   ```
+## Set Up Database and Keys
+### Create a MongoDB Atlas Account
 
-2. cd into the repository and then cd in frontend and run npm install
-
-3. cd into the backend and run npm install
-
-4. Create a MongoDB Atlast account
-   Go to https://account.mongodb.com/account/register
-
-- Once you create an account click create cluster
-- Once you attempt to make your cluster make sure to whitelist all IP's or set this IP as allowed in the Network Access Tab: 0.0.0.0/0
-- Next create a admin database user by creating a username and password of your choice (Make sure to remember!)
-- Make sure to copy the Mongo_URI that is given and replace your db_password with the password you just created
-- Add the Mongo URI to your dot env file naming it exactly MONGO_URI
+4. Navigate to https://account.mongodb.com/account/register
+- After you create an account, click "Create cluster".
+- Make sure to whitelist all IP addresses by adding the following in the Network Access tab: ```0.0.0.0/0```.
+- Create a admin database user by creating a username and password of your choice (Make sure to remember them!).
+- Make sure to copy the connection string that is given and replace ```db_password``` with the password you just created.
+- Add the connection string to your ```.env``` file as ```MONGO_URI``` .
 
 ![Alt Text](https://i.sstatic.net/ITq6c.png "Optional Tooltip")
 
-5. Create an Edamam API account
+5.  Your ```JWT_SECRET``` can be any string you of your choice (basically a secret code).
 
-- Edamam is the API that we use to search for recipes and returns the recipes back in JSON format. We can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
+### Create an Edamam API account
+
+6. Edamam is the API that used to search for recipes, and returns the recipes back in JSON format. You can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
 
 Here is how to sign up for the Edamam API
 
-- Go to https://www.edamam.com/
-- Make sure when signing up to choose Enterprise Basic under the Recipe Search API (you should not have to enter your credit card details)
+- Go to https://www.edamam.com/ and sign up for an account.
+- Make sure when signing up to choose Enterprise Basic under the Recipe Search API (you should need to enter credit card details)
 
-- When signed in, go to your Dashboard and click Applications
-- Under RecipeSearch API click view
+- Once signed in, go to your "Dashboard" and click "Applications".
+- Click "View" next to "Recipe Search API".
 
 ![Alt Text](https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/321/posts/41545/image-upload/dashboard.JPG "Optional Tooltip")
 
-There you will see your Application ID and Application Keys
-Put your application id into EDAMAM_APP_ID and your application key into EDAMAM_APP_KEY in your .env file
+There, you should see your Application ID and Application Keys.
+Put your Application ID into ```EDAMAM_APP_ID``` and your Application Key into ```EDAMAM_APP_KEY``` in your ```.env``` file.
 
-6. Create Google Console Account
-   Go to https://console.cloud.google.com/welcome/new
+### Create Google Console Account
+7. Go to https://console.cloud.google.com/welcome/new.
 
-- Sign in with a google account of your choice
-- Once logged in create a new project and name it whatever you want
-- Next we have to create the consent screen for Google Auth
-- Click OAuth Consent Screen on the left sidebar
-- Make sure to make the user type external and click create
-- Once you click create type in the App Name and the email you want to send updates to
-- Skip everything on the screen and click save and continue
-- Once you see the public app button click publish app to shift the status from Testing to Production and your app is now live
+- Sign in with a Google account of your choice.
+- Once logged in create a new project and name it whatever you want.
+- Next, you have to create the consent screen for Google Auth.
+   - Click "OAuth Consent Screen" in the left sidebar
+   - Select "External" as the user type and click "Create".
+   - Enter the app name and an email address for updates.
+   - Skip all remaining fields and click "Save and Continue".
+   - Once you see the "Public App" button, click "Publish App" to shift the status from "Testing" to "Production".
+Your app is now live!
 
-Now we have to create our client web ID
+Now we have to create our Client Web ID.
 
-- On the left sidebar click credentials and at the top click create credentials and select OAUTH ID
-- Make the application type is a web application
+- In the left sidebar, click "Credentials" and then "Create Credentials" and select "OAuth Client ID".
+- Choose "Web Application" as the application type.
 
 ![Alt Text](https://blog.logrocket.com/wp-content/uploads/2022/08/img6-Steps-to-create-OAuth-client-ID.png "Optional Tooltip")
 
-Now here is the important part
+- Scroll down to "Authorized Javascript Origins" and add the following URL: http://localhost:5173
+- Make the Authorized Redirect URL:
+  http://localhost:5000/api/auth/google/callback
 
-- Scroll down to Authorized Javascript Origins and make the URL: http://localhost:5173
-- Make the Authorized Redirect URL to be: http://localhost:5000/api/auth/google/callback
+On the right side, you should your "Client ID" and "Client Secret". Copy these and add them to your ```.env``` file.
 
-On the right side you can see your Client ID and Client Secret which you will promptly put in your .env file
+Now you have all your Unique IDs and Keys to run the app locally!
 
-7.  You JWT_SECRET can be anything you want (basically a secret code)
+### Run the App
 
-Now you have all your Unique Ids and Keys to run the app locally!
+8.  Run the following commands in terminal.
 
-8.  To run the app locally
-
-To start the frontend:
+Start the frontend:
 
 ```
 cd frontend
-```
-
-```
 npm run dev
 ```
 
-To start the backend:
+Start the backend:
 
 ```
 cd backend
-```
-
-```
 node index.js
 ```
 

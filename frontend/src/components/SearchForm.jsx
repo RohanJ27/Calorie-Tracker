@@ -1,10 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import RecipeContext from '../context/RecipeContext';
 import BounceLoader from "react-spinners/BounceLoader";
-
 
 const SearchForm = () => {
   const { auth } = useContext(AuthContext);
@@ -24,7 +23,6 @@ const SearchForm = () => {
 
   const { ingredients, diet, health, calories, protein, fat, carbs } = formData;
 
-  
   const isValidRange = (value) => {
     return /^\d+-\d+$/.test(value);
   };
@@ -32,6 +30,16 @@ const SearchForm = () => {
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    let timer;
+    if (error) {
+      timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [error]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -92,7 +100,6 @@ const SearchForm = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div style={styles.container}>

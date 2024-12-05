@@ -15,13 +15,9 @@ const Navbar = () => {
   };
 
   const handleDarkModeToggle = () => {
-    if (document.body.style.filter !== 'invert(100%) hue-rotate(180deg)') {
-      document.body.style.filter = 'invert(100%) hue-rotate(180deg)';
-      document.getElementById('togTex').innerText = 'Dark';
-    } else {
-      document.body.style.filter = 'none';
-      document.getElementById('togTex').innerText = 'Light';
-    }
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    document.getElementById('togTex').innerText = isDarkMode ? 'Dark' : 'Light';
   };
 
   return (

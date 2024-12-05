@@ -218,3 +218,13 @@ input:checked+.slider:before {
     font-size: 14px;
   }
 }
+
+body.dark-mode {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+body.dark-mode img,
+body.dark-mode .search-results-image {
+  filter: invert(100%) hue-rotate(180deg);
+}
+

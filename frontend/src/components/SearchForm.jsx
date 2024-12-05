@@ -45,6 +45,13 @@ const SearchForm = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const allFieldsEmpty = !ingredients && !diet && !health && !calories && !protein && !fat && !carbs;
+    if (allFieldsEmpty) {
+      setError('No recipes found. Try adjusting your search criteria.');
+      setLoading(false);
+      return;
+    }
   
     if (
       (protein && !isValidRange(protein)) ||

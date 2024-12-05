@@ -23,9 +23,9 @@ const SearchResults = () => {
 
   const handleViewRecipe = (recipe) => {
     if (recipe.isExternal) {
-      window.open(recipe.url, '_blank'); // Open Edamam recipe in a new tab
+      window.open(recipe.url, '_blank');
     } else {
-      navigate(`/recipes/${recipe.id}`); // Navigate to user-uploaded recipe details
+      navigate(`/recipes/${recipe.id}`);
     }
   };
 
@@ -46,9 +46,9 @@ const SearchResults = () => {
               <h3 style={styles.recipeTitle}>
                 {recipe.label
                   ? recipe.label
-                      .split(' ')
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' ')
+                    .split(' ')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')
                   : 'Untitled Recipe'}
               </h3>
               <p style={styles.text}>
@@ -61,31 +61,31 @@ const SearchResults = () => {
                 <strong>Diet Labels:</strong>{' '}
                 {recipe.dietLabels?.length > 0
                   ? recipe.dietLabels
-                      .map((label) =>
-                        label
-                          .split(' ')
-                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                          .join(' ')
-                      )
-                      .join(', ')
+                    .map((label) =>
+                      label
+                        .split(' ')
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ')
+                    )
+                    .join(', ')
                   : 'N/A'}
               </p>
               <p style={styles.text}>
                 <strong>Health Labels:</strong>{' '}
                 {recipe.healthLabels?.length > 0
                   ? recipe.healthLabels
-                      .map((label) =>
-                        label
-                          .split(' ')
-                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                          .join(' ')
-                      )
-                      .join(', ')
+                    .map((label) =>
+                      label
+                        .split(' ')
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ')
+                    )
+                    .join(', ')
                   : 'N/A'}
               </p>
               <button
                 onClick={() => handleViewRecipe(recipe)}
-                style={styles.link} 
+                style={styles.link}
               >
                 View Recipe
               </button>
@@ -106,6 +106,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     boxSizing: 'border-box',
+    width: '100vw',
   },
   title: {
     fontSize: '40px',

@@ -1,5 +1,5 @@
 # RecipeFit
-Welcome to RecipeFit - the all-in-one Recipe app where you can create, search for, and socialize based on of your dietary needs!
+Welcome to RecipeFit - the all-in-one Recipe app where you can create, search for, and socialize based on your dietary needs!
 
 If you have a limited list of ingredients at home, a peanut allergy that restricts food choices, or just want to keep track of your healthy eating, RecipeFit provides a solution and much more.
 
@@ -55,22 +55,22 @@ FRONTEND_URL=http://localhost:5173
 4. Navigate to https://account.mongodb.com/account/register
 - After you create an account, click "Create cluster".
 - Make sure to whitelist all IP addresses by adding the following in the Network Access tab: ```0.0.0.0/0```.
-- Create a admin database user by creating a username and password of your choice (Make sure to remember them!).
+- Create an admin database user by creating a username and password of your choice (Make sure to remember them!).
 - Make sure to copy the connection string that is given and replace ```db_password``` with the password you just created.
 - Add the connection string to your ```.env``` file as ```MONGO_URI``` .
 
 ![Alt Text](https://i.sstatic.net/ITq6c.png "Optional Tooltip")
 
-5.  Your ```JWT_SECRET``` can be any string you of your choice (basically a secret code).
+5.  Your ```JWT_SECRET``` can be any string of your choice (basically a secret code).
 
 ### Create an Edamam API account
 
-6. Edamam is the API that used to search for recipes, and returns the recipes back in JSON format. You can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
+6. Edamam is the API that's used to search for recipes, and returns the recipes back in JSON format. You can search for recipes with filters of ingredients, dietary restrictions, and macro goals!
 
 Here is how to sign up for the Edamam API
 
 - Go to https://www.edamam.com/ and sign up for an account.
-- Make sure when signing up to choose Enterprise Basic under the Recipe Search API (you should need to enter credit card details)
+- Make sure when signing up to choose Enterprise Basic under the Recipe Search API (you should need to enter credit card details).
 
 - Once signed in, go to your "Dashboard" and click "Applications".
 - Click "View" next to "Recipe Search API".
@@ -86,7 +86,7 @@ Put your Application ID into ```EDAMAM_APP_ID``` and your Application Key into `
 - Sign in with a Google account of your choice.
 - Once logged in create a new project and name it whatever you want.
 - Next, you have to create the consent screen for Google Auth.
-   - Click "OAuth Consent Screen" in the left sidebar
+   - Click "OAuth Consent Screen" in the left sidebar.
    - Select "External" as the user type and click "Create".
    - Enter the app name and an email address for updates.
    - Skip all remaining fields and click "Save and Continue".
@@ -104,7 +104,7 @@ Now we have to create our Client Web ID.
 - Make the Authorized Redirect URL:
   http://localhost:5000/api/auth/google/callback
 
-On the right side, you should your "Client ID" and "Client Secret". Copy these and add them to your ```.env``` file.
+On the right side, you should see your "Client ID" and "Client Secret". Copy these and add them to your ```.env``` file.
 
 Now you have all your Unique IDs and Keys to run the app locally!
 

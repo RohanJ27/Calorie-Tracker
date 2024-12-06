@@ -19,11 +19,8 @@ const Profile = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [friends]);
-
   const fetchFriends = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -44,10 +41,12 @@ const Profile = () => {
         setFriends([]);
       }
 
-      setIsLoading(false);
+      setErrorMessage('');
     } catch (error) {
       console.error('Failed to fetch friends:', error);
       setErrorMessage('Unable to load friends list.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -104,7 +103,7 @@ const Profile = () => {
       <div className="profile-header">
         <h2 className="profile-title">Welcome, {user.username}!</h2>
         <p className="profile-email">Email: {user.email}</p>
-        <p className="profile-score">Score: {user.score || 'N/A'}</p>
+        <p className="profile-score">Score: {user.score || 0}</p>
       </div>
       <div className="profile-buttons">
         <Link to="/upload" className="profile-button">Upload Recipe</Link>

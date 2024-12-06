@@ -80,7 +80,7 @@ router.post(
             throw err;
           }
           console.log('Signup Successful: Token generated');
-          res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
+          res.json({ token, user: { _id: user._id, username: user.username, email: user.email } });
         }
       );
     } catch (err) {
@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
+        res.json({ token, user: { _id: user._id, username: user.username, email: user.email } });
       }
     );
   } catch (err) {

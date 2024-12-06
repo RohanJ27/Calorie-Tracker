@@ -44,7 +44,7 @@ const Navbar = () => {
             <Link to="/profile" className="nav-link">Account Details</Link>
             {user && (
               <span className="user-score">
-                Score: {user.score}
+                Score: {user.score || 0}
                 <span className="tooltip-text">
                   Your score increases when you search for recipes!
                 </span>

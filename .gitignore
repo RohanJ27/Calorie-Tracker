@@ -8,3 +8,6 @@ logs
 
 # Environment variables
 backend/.env
+
+# Uploaded image directory
+backend/uploads/
